@@ -6,7 +6,7 @@
     -- Lower-level code to interact with the EV3 robot library.
 
   Author:  Your professors (for the framework and lower-level code)
-    and PUT_YOUR_NAMES_HERE.
+    and Valeria Paiz, Samuel VanDenburgh, Justin Heinz.
   Winter term, 2018-2019.
 """
 
