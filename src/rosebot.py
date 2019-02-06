@@ -197,7 +197,7 @@ class ArmAndClaw(object):
             if self.touch_sensor.is_pressed():
                 self.motor.turn_off()
                 break
-        
+
     def calibrate_arm(self):
         """
         Calibrates its Arm, that is:
