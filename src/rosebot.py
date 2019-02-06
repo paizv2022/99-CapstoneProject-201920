@@ -30,9 +30,9 @@ import math
 class RoseBot(object):
     def __init__(self):
         # Use these instance variables
-        self.drive_system = DriveSystem()
-        self.arm_and_claw = ArmAndClaw()
-        self.sensor_system = SensorSystem
+        self.sensor_system = SensorSystem()
+        self.arm_and_claw = ArmAndClaw(self.sensor_system.touch_sensor)
+        self.drive_system = DriveSystem(self.sensor_system)
 
 
 ###############################################################################
@@ -229,15 +229,14 @@ class SensorSystem(object):
     the Button objects that form part of the BeaconSystem and DisplaySystem.
     Use this object to get   ** any **   sensor reading.
     """
-    def __init__(self, touch_sensor, color_sensor, ir_proximity_sensor,
-                 ir_beacon_sensor, camera, beacon_system, display_system):
-        self.touch_sensor = touch_sensor
-        self.color_sensor = color_sensor
-        self.ir_proximity_sensor = ir_proximity_sensor
-        self.ir_beacon_sensor = ir_beacon_sensor
-        self.camera = camera
-        self.beacon_system = beacon_system
-        self.display_system = display_system
+    def __init__(self):
+        self.touch_sensor = TouchSensor(1)
+        #self.color_sensor = color_sensor
+        #self.ir_proximity_sensor = ir_proximity_sensor
+        #self.ir_beacon_sensor = ir_beacon_sensor
+        #self.camera = camera
+        #self.beacon_system = beacon_system
+        #self.display_system = display_system
 
 
 ###############################################################################
