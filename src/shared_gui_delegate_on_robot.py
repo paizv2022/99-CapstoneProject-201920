@@ -8,7 +8,7 @@
 """
 
 class ResponderToGUIMessages(object):
-    def __init__(self):
+    def __init__(self, robot):
         """
             :type robot: rosebot.RoseBot
         """
