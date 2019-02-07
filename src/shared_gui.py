@@ -189,8 +189,8 @@ def handle_left(left_entry_box, right_entry_box, mqtt_sender):
       :type  right_entry_box:  ttk.Entry
       :type  mqtt_sender:      com.MqttClient
     """
-    print("Left", left_entry_box, right_entry_box)
-    left = -int(left_entry_box)
+    print("Left", left_entry_box.get(), right_entry_box.get())
+    left = -int(left_entry_box.get())
     right = right_entry_box.get()
     mqtt_sender.send_message("go", [str(left), right])
 
@@ -202,8 +202,8 @@ def handle_right(left_entry_box, right_entry_box, mqtt_sender):
       :type  right_entry_box:  ttk.Entry
       :type  mqtt_sender:      com.MqttClient
     """
-    print("Left", left_entry_box, right_entry_box)
-    left = left_entry_box
+    print("Right", left_entry_box.get(), right_entry_box.get())
+    left = left_entry_box.get()
     right = -int(right_entry_box.get())
     mqtt_sender.send_message("go", [left, str(right)])
 
@@ -222,6 +222,8 @@ def handle_raise_arm(mqtt_sender):
     Tells the robot to raise its Arm until its touch sensor is pressed.
       :type  mqtt_sender:  com.MqttClient
     """
+    print('Raise Arm')
+    mqtt_sender.send_message('raise_arm')
 
 
 def handle_lower_arm(mqtt_sender):
@@ -229,6 +231,8 @@ def handle_lower_arm(mqtt_sender):
     Tells the robot to lower its Arm until it is all the way down.
       :type  mqtt_sender:  com.MqttClient
     """
+    print('Lower Arm')
+    mqtt_sender.send_message('lower_arm')
 
 
 def handle_calibrate_arm(mqtt_sender):
@@ -238,6 +242,8 @@ def handle_calibrate_arm(mqtt_sender):
     all the way down, and then to mark taht position as position 0.
       :type  mqtt_sender:  com.MqttClient
     """
+    print('Calibrate Arm')
+    mqtt_sender.send_message('calibrate_arm')
 
 
 def handle_move_arm_to_position(arm_position_entry, mqtt_sender):
@@ -247,7 +253,8 @@ def handle_move_arm_to_position(arm_position_entry, mqtt_sender):
       :type  arm_position_entry  ttk.Entry
       :type  mqtt_sender:        com.MqttClient
     """
-
+    print('Move to Position', arm_position_entry.get())
+    mqtt_sender.send_message('move_arm_to_position', [arm_position_entry.get()])
 
 ###############################################################################
 # Handlers for Buttons in the Control frame.
