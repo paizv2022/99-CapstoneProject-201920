@@ -29,7 +29,7 @@ def main():
     # The root TK object for the GUI:
     # -------------------------------------------------------------------------
     root = tkinter.Tk()
-    root.Title('CSSE 120 Capstone Project, winter 2018-19')
+    root.title('CSSE 120 Capstone Project, winter 2018-19')
 
     # -------------------------------------------------------------------------
     # The main frame, upon which the other frames are placed.
