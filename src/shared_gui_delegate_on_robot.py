@@ -7,6 +7,7 @@
   Winter term, 2018-2019.
 """
 
+
 class ResponderToGUIMessages(object):
     def __init__(self, robot):
         """
@@ -18,3 +19,6 @@ class ResponderToGUIMessages(object):
         left = int(left_wheel_speed)
         right = int(right_wheel_speed)
         self.robot.drive_system.go(left, right)
+
+    def stop(self):
+        self.robot.drive_system.stop()

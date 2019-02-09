@@ -16,7 +16,6 @@
 
 import tkinter
 from tkinter import ttk
-import time
 
 
 def get_teleoperation_frame(window, mqtt_sender):
@@ -153,6 +152,7 @@ def get_control_frame(window, mqtt_sender):
 ###############################################################################
 ###############################################################################
 
+
 ###############################################################################
 # Handlers for Buttons in the Teleoperation frame.
 ###############################################################################
@@ -168,6 +168,7 @@ def handle_forward(left_entry_box, right_entry_box, mqtt_sender):
     mqtt_sender.send_message("go", [left_entry_box.get(),
                                     right_entry_box.get()])
 
+
 def handle_backward(left_entry_box, right_entry_box, mqtt_sender):
     """
     Tells the robot to move using the speeds in the given entry boxes,
@@ -180,6 +181,7 @@ def handle_backward(left_entry_box, right_entry_box, mqtt_sender):
     left = -int(left_entry_box.get())
     right = -int(right_entry_box.get())
     mqtt_sender.send_message("go", [str(left), str(right)])
+
 
 def handle_left(left_entry_box, right_entry_box, mqtt_sender):
     """
@@ -194,6 +196,7 @@ def handle_left(left_entry_box, right_entry_box, mqtt_sender):
     right = right_entry_box.get()
     mqtt_sender.send_message("go", [str(left), right])
 
+
 def handle_right(left_entry_box, right_entry_box, mqtt_sender):
     """
     Tells the robot to move using the speeds in the given entry boxes,
@@ -207,13 +210,15 @@ def handle_right(left_entry_box, right_entry_box, mqtt_sender):
     right = -int(right_entry_box.get())
     mqtt_sender.send_message("go", [left, str(right)])
 
+
 def handle_stop(mqtt_sender):
     """
     Tells the robot to stop.
       :type  mqtt_sender:  com.MqttClient
     """
     print("Stop")
-    mqtt_sender.close()
+    mqtt_sender.send_message("stop")
+
 
 ###############################################################################
 # Handlers for Buttons in the ArmAndClaw frame.
@@ -224,7 +229,7 @@ def handle_raise_arm(mqtt_sender):
       :type  mqtt_sender:  com.MqttClient
     """
     print('Raise Arm')
-    mqtt_sender.send_message('raise_arm')
+    mqtt_sender.send_message("raise")
 
 
 def handle_lower_arm(mqtt_sender):
@@ -256,6 +261,7 @@ def handle_move_arm_to_position(arm_position_entry, mqtt_sender):
     """
     print('Move to Position', arm_position_entry.get())
     mqtt_sender.send_message('move_arm_to_position', [arm_position_entry.get()])
+
 
 ###############################################################################
 # Handlers for Buttons in the Control frame.
