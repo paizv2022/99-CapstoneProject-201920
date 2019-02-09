@@ -232,6 +232,7 @@ class ArmAndClaw(object):
         """
         self.raise_arm()
         self.motor.turn_on(-100)
+        self.motor.reset_position()
         while True:
             if abs(self.motor.get_position()) >= 14.2 * 360:
                 self.motor.turn_off()
@@ -263,7 +264,7 @@ class ArmAndClaw(object):
         """
         start_time = time.time()
         self.motor.turn_on(-100)
-        duration = (14.2 * 360) / 100
+        duration = 5.5
         while True:
             if time.time() > start_time + duration:
                 self.motor.turn_off()
