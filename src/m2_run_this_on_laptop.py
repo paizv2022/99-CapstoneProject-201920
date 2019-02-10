@@ -125,6 +125,7 @@ def get_driver_frame(window, mqtt_sender):
     inches_input.grid(row=2, column=2)
     speed_input.grid(row=2, column=1)
     return frame
+
 # -----------------------------------------------------------------------------
 # Calls  main  to start the ball rolling.
 # -----------------------------------------------------------------------------
