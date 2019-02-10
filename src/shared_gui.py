@@ -151,7 +151,46 @@ def get_driver_frame(window, mqtt_sender):
 
 
 def get_sound_frame(window, mqtt_sender):
-    pass
+    # Construct the frame to return:
+    frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
+    frame.grid()
+
+    # Construct the widgets on the frame:
+    frame_label = ttk.Label(frame, text="Sounds")
+    number_label = ttk.Label(frame, text="Number")
+    frequency_label = ttk.Label(frame, text="Frequency")
+    phrase_label = ttk.Label(frame, text='Phrase')
+
+    number_entry = ttk.Entry(frame, width=8)
+    frequency_entry = ttk.Entry(frame, width=8, justify=tkinter.CENTER)
+    phrase_entry = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
+
+    beep_button = ttk.Button(frame, text='Beep')
+    tone_button = ttk.Button(frame, text='Tone')
+    phrase_button = ttk.Button(frame, text='Speak')
+
+
+    # Grid the widgets:
+    frame_label.grid(row=0, column=1)
+    number_label.grid(row=1, column=0)
+    frequency_label.grid(row=1, column=1)
+    phrase_label.grid(row=1, column=2)
+
+    number_entry.grid(row=2, column=0)
+    frequency_entry.grid(row=2, column=1)
+    phrase_entry.grid(row=2, column=2)
+
+    beep_button.grid(row=3, column=0)
+    tone_button.grid(row=3, column=1)
+    phrase_button.grid(row=3, column=2)
+
+
+    # Set the button callbacks:
+    beep_button["command"] = lambda: handle_beep(number_entry, mqtt_sender)
+    tone_button["command"] = lambda: handle_play_tone(frequency_entry, mqtt_sender)
+    phrase_button["command"] = lambda: handle_speak(phrase_entry, mqtt_sender)
+
+    return frame
 
 ###############################################################################
 ###############################################################################
@@ -291,3 +330,41 @@ def handle_exit(mqtt_sender):
     """
     print('Exit')
     mqtt_sender.send_message("exit")
+
+
+###############################################################################
+# Handlers for Buttons in the Sounds frame.
+###############################################################################
+def handle_beep(number_entry, mqtt_sender):
+    """
+    Tell the robot's program to stop its loop (and hence quit).
+      :type  mqtt_sender:  com.MqttClient
+      :type  number_entry:   ttk.Entry
+    """
+    print('Beep', number_entry.get())
+    mqtt_sender.send_message("beep", [number_entry.get()])
+
+
+def handle_play_tone(frequency_entry, mqtt_sender):
+    """
+    Tell the robot's program to stop its loop (and hence quit).
+      :type  mqtt_sender:  com.MqttClient
+      :type  frequency_entry:   ttk.Entry
+    """
+    print('Play Tone', frequency_entry.get())
+    mqtt_sender.send_message("play_tone", [frequency_entry.get()])
+
+
+def handle_speak(phrase_entry, mqtt_sender):
+    """
+    Tell the robot's program to stop its loop (and hence quit).
+      :type  mqtt_sender:  com.MqttClient
+      :type  phrase_entry:   ttk.Entry
+    """
+    print('Speak', phrase_entry.get())
+    mqtt_sender.send_message("speak", [phrase_entry.get()])
+
+
+
+
+

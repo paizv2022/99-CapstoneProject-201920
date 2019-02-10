@@ -19,24 +19,29 @@ class ResponderToGUIMessages(object):
         left = int(left_wheel_speed)
         right = int(right_wheel_speed)
         self.robot.drive_system.go(left, right)
-        print('went forward')
 
     def stop(self):
         self.robot.drive_system.stop()
-        print('stopped')
 
     def raise_arm(self):
         self.robot.arm_and_claw.raise_arm()
-        print('arm up')
 
     def lower_arm(self):
         self.robot.arm_and_claw.lower_arm()
-        print('arm down')
 
     def calibrate_arm(self):
         self.robot.arm_and_claw.calibrate_arm()
-        print('calibrated')
 
     def move_arm_to_position(self, position):
         self.robot.arm_and_claw.move_arm_to_position(int(position))
-        print('moved')
+
+    def beep(self, number):
+        for k in range(int(number)):
+            self.robot.sound_system.beeper.beep()
+
+    def play_tone(self, frequency):
+        self.robot.sound_system.tone_maker.play_tone(int(frequency))
+
+    def speak(self, phrase):
+        self.robot.sound_system.speech_maker.speak(phrase)
+
