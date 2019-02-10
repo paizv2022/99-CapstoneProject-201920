@@ -179,8 +179,16 @@ def get_driver_frame(window, mqtt_sender):
     seconds_input.grid(row=2, column=0)
     inches_input.grid(row=2, column=2)
     speed_input.grid(row=2, column=1)
-    return frame
 
+    # Set the button callbacks:
+    go_for_sec_button["command"] = lambda: handle_go_for_seconds(mqtt_sender,
+        seconds_input, speed_input)
+    go_for_inches_encoder_button["command"] = lambda: handle_go_for_inches_encoder(mqtt_sender,
+        inches_input, speed_input)
+    go_for_inches_time_button["command"] = lambda: handle_go_for_inches_time(mqtt_sender,
+        inches_input, speed_input)
+
+    return frame
 
 def get_sound_frame(window, mqtt_sender):
     frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")

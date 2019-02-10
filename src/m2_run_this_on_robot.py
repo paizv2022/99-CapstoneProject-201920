@@ -23,6 +23,7 @@ def real_thing():
     delegate = shared_gui_delegate_on_robot.ResponderToGUIMessages(robot)
     mqtt_receiver = com.MqttClient(delegate)
     mqtt_receiver.connect_to_pc()
+    
     while True:
         time.sleep(0.01)
 
