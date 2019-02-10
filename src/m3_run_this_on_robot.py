@@ -18,9 +18,8 @@ def main():
       2. Communicates via MQTT with the GUI code that runs on the LAPTOP.
     """
     # run_test_arm()
-    #run_test_move()
-    run_test_beep()
-
+    # run_test_move()
+    # run_test_beep()
     # real_thing()
 
 
@@ -39,7 +38,7 @@ def run_test_arm():
 
 def real_thing():
     robot = rosebot.RoseBot()
-    delegate = shared_gui_delegate_on_robot.ResponderToGUIMessage(robot)
+    delegate = shared_gui_delegate_on_robot.ResponderToGUIMessages(robot)
     mqtt_receiver = com.MqttClient(delegate)
     mqtt_receiver.connect_to_pc()
     while True:
@@ -49,7 +48,7 @@ def real_thing():
 def run_test_move():
     robot = rosebot.RoseBot()
     print('Running Test: Go')
-    robot.drive_system.go()
+    robot.drive_system.go(100, 100)
     time.sleep(5)
     print('Running Test: Stop')
     robot.drive_system.stop()
@@ -67,13 +66,17 @@ def run_test_move():
 
 def run_test_beep():
     b = rosebot.Beeper()
-    for k in range(10):
+    for k in range(5):
         b.beep().wait(200)
+
+    time.sleep(3)
 
     t = rosebot.ToneMaker()
     frequency = 500
     duration = 200
     t.play_tone(frequency, duration)
+
+    time.sleep(3)
 
     s = rosebot.SpeechMaker()
     s.speak('Hello we are team 8')
