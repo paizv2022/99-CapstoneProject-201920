@@ -190,6 +190,7 @@ def get_driver_frame(window, mqtt_sender):
 
     return frame
 
+
 def get_sound_frame(window, mqtt_sender):
     frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
     frame.grid()
