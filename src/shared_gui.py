@@ -183,7 +183,7 @@ def get_driver_frame(window, mqtt_sender):
 
 
 def get_sound_frame(window, mqtt_sender):
-    pass
+        pass
 
 ###############################################################################
 ###############################################################################
@@ -324,17 +324,54 @@ def handle_exit(mqtt_sender):
     print('Exit')
     mqtt_sender.send_message("exit")
 
-    ###############################################################################
-    # Handlers for Buttons in the Driver frame.
-    ###############################################################################
+
+###############################################################################
+# Handlers for Buttons in the Driver frame.
+###############################################################################
 def handle_go_for_seconds(mqtt_sender, seconds_entry, speed_entry):
     print("Go Straight for", seconds_entry.get(), "seconds at a speed of", speed_entry.get())
     mqtt_sender.send_message("go_straight_for_seconds", [seconds_entry.get(), speed_entry.get()])
 
-def handle_go_for_inches_encoder(mqtt_sender, inches_entry, speed_entry):
-    print("Go Straight for", seconds_entry.get(), "inches at a speed of", speed_entry.get(), "using encoder")
-    mqtt_sender.send_message("go_straight_for_inches_using_encoder", [inches_entry.get(), speed_entry.get()])
 
 def handle_go_for_inches_encoder(mqtt_sender, inches_entry, speed_entry):
-    print("Go Straight for", seconds_entry.get(), "inches at a speed of", speed_entry.get(), "using time")
+    print("Go Straight for", inches_entry.get(), "inches at a speed of", speed_entry.get(), "using encoder")
+    mqtt_sender.send_message("go_straight_for_inches_using_encoder", [inches_entry.get(), speed_entry.get()])
+
+
+def handle_go_for_inches_time(mqtt_sender, inches_entry, speed_entry):
+    print("Go Straight for", inches_entry.get(), "inches at a speed of", speed_entry.get(), "using time")
     mqtt_sender.send_message("go_straight_for_inches_using_time", [inches_entry.get(), speed_entry.get()])
+    
+
+###############################################################################
+# Handlers for Buttons in the Sounds frame.
+###############################################################################
+def handle_beep(number_entry, mqtt_sender):
+    """
+    Tell the robot's program to stop its loop (and hence quit).
+      :type  mqtt_sender:  com.MqttClient
+      :type  number_entry:   ttk.Entry
+    """
+    print('Beep', number_entry.get())
+    mqtt_sender.send_message("beep", [number_entry.get()])
+
+
+def handle_play_tone(frequency_entry, duration_entry, mqtt_sender):
+    """
+    Tell the robot's program to stop its loop (and hence quit).
+      :type  mqtt_sender:  com.MqttClient
+      :type  frequency_entry:   ttk.Entry
+      :type  duration_entry:    ttk.Entry
+    """
+    print('Play Tone', frequency_entry.get(), duration_entry.get())
+    mqtt_sender.send_message("play_tone", [frequency_entry.get(), duration_entry.get()])
+
+
+def handle_speak(phrase_entry, mqtt_sender):
+    """
+    Tell the robot's program to stop its loop (and hence quit).
+      :type  mqtt_sender:  com.MqttClient
+      :type  phrase_entry:   ttk.Entry
+    """
+    print('Speak', phrase_entry.get())
+    mqtt_sender.send_message("speak", [phrase_entry.get()])
