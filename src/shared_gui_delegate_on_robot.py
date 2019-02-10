@@ -36,11 +36,11 @@ class ResponderToGUIMessages(object):
         self.robot.arm_and_claw.move_arm_to_position(int(position))
 
     def beep(self, number):
-        for k in range(int(number)):
+        for k in range(int(number) + 1):
             self.robot.sound_system.beeper.beep()
 
-    def play_tone(self, frequency):
-        self.robot.sound_system.tone_maker.play_tone(int(frequency))
+    def play_tone(self, frequency, duration):
+        self.robot.sound_system.tone_maker.play_tone(int(frequency), int(duration))
 
     def speak(self, phrase):
         self.robot.sound_system.speech_maker.speak(phrase)
