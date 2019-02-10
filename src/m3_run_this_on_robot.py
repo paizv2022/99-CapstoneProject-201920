@@ -18,7 +18,7 @@ def main():
       2. Communicates via MQTT with the GUI code that runs on the LAPTOP.
     """
     # run_test_arm()
-    run_test_move()
+    #run_test_move()
     run_test_beep()
 
     # real_thing()
@@ -66,9 +66,17 @@ def run_test_move():
 
 
 def run_test_beep():
-    # will be added in feature 7
-    beeper = rosebot.Beeper()
-    beeper.beep().wait()
+    b = rosebot.Beeper()
+    for k in range(10):
+        b.beep().wait(200)
+
+    t = rosebot.ToneMaker()
+    frequency = 500
+    duration = 200
+    t.play_tone(frequency, duration)
+
+    s = rosebot.SpeechMaker()
+    s.speak('Hello we are team 8')
 
 
 # -----------------------------------------------------------------------------
