@@ -145,6 +145,14 @@ def get_control_frame(window, mqtt_sender):
 
     return frame
 
+
+def get_driver_frame(window, mqtt_sender):
+    pass
+
+
+def get_sound_frame(window, mqtt_sender):
+    pass
+
 ###############################################################################
 ###############################################################################
 # The following specifies, for each Button,
