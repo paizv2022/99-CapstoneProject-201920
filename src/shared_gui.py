@@ -16,6 +16,7 @@
 
 import tkinter
 from tkinter import ttk
+import sys
 
 
 def get_teleoperation_frame(window, mqtt_sender):
@@ -198,7 +199,7 @@ def get_sound_frame(window, mqtt_sender):
     frame_label = ttk.Label(frame, text="Sounds")
     number_label = ttk.Label(frame, text="Number of beeps:")
     frequency_label = ttk.Label(frame, text="Frequency and")
-    duration_label = ttk.Label(frame, text='duration:')
+    duration_label = ttk.Label(frame, text='duration (msec):')
     phrase_label = ttk.Label(frame, text='Phrase:')
 
     number_entry = ttk.Entry(frame, width=8)
@@ -360,8 +361,8 @@ def handle_exit(mqtt_sender):
     Then exit this program.
       :type mqtt_sender: com.MqttClient
     """
-    print('Exit')
-    mqtt_sender.send_message("exit")
+    handle_quit(mqtt_sender)
+    sys.exit()
 
 
 ###############################################################################
