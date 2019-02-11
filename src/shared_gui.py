@@ -154,17 +154,17 @@ def get_driver_frame(window, mqtt_sender):
 
     # feature 6 widgets
     frame_label = ttk.Label(frame, text="Driver")
-    seconds_label = ttk.Label(frame, text="Seconds")
-    inches_label = ttk.Label(frame, text="Inches")
-    speed_label = ttk.Label(frame, text="Speed")
+    seconds_label = ttk.Label(frame, text="Seconds:")
+    inches_label = ttk.Label(frame, text="Inches:")
+    speed_label = ttk.Label(frame, text="Speed:")
 
     seconds_input = ttk.Entry(frame, width=8)
     inches_input = ttk.Entry(frame, width=8)
     speed_input = ttk.Entry(frame, width=8)
 
-    go_for_sec_button = ttk.Button(frame, text="go for seconds")
-    go_for_inches_encoder_button = ttk.Button(frame, text="go for inches (encoder)")
-    go_for_inches_time_button = ttk.Button(frame, text="go for inches (time-based)")
+    go_for_sec_button = ttk.Button(frame, text="Go for Seconds")
+    go_for_inches_encoder_button = ttk.Button(frame, text="Go for Inches (encoder)")
+    go_for_inches_time_button = ttk.Button(frame, text="Go for Inches (time-based)")
 
     #grids the buttons/labels/entry boxes
     frame_label.grid(row=0, column=1)
@@ -196,10 +196,10 @@ def get_sound_frame(window, mqtt_sender):
     frame.grid()
 
     frame_label = ttk.Label(frame, text="Sounds")
-    number_label = ttk.Label(frame, text="Number")
-    frequency_label = ttk.Label(frame, text="Frequency")
-    phrase_label = ttk.Label(frame, text='Phrase')
-    duration_label = ttk.Label(frame, text='Duration')
+    number_label = ttk.Label(frame, text="Number of beeps:")
+    frequency_label = ttk.Label(frame, text="Frequency and")
+    duration_label = ttk.Label(frame, text='duration:')
+    phrase_label = ttk.Label(frame, text='Phrase:')
 
     number_entry = ttk.Entry(frame, width=8)
     frequency_entry = ttk.Entry(frame, width=8)
@@ -210,20 +210,20 @@ def get_sound_frame(window, mqtt_sender):
     tone_button = ttk.Button(frame, text='Tone')
     phrase_button = ttk.Button(frame, text='Speak')
 
-    frame_label.grid(row=0, column=1)
+    frame_label.grid(row=0, column=2)
     number_label.grid(row=1, column=0)
-    frequency_label.grid(row=1, column=1)
-    duration_label.grid(row=1, column=2)
-    phrase_label.grid(row=1, column=3)
+    frequency_label.grid(row=2, column=0)
+    duration_label.grid(row=2, column=2)
+    phrase_label.grid(row=3, column=0)
 
-    number_entry.grid(row=2, column=0)
+    number_entry.grid(row=1, column=1)
     frequency_entry.grid(row=2, column=1)
-    duration_entry.grid(row=2, column=2)
-    phrase_entry.grid(row=2, column=3)
+    duration_entry.grid(row=2, column=3)
+    phrase_entry.grid(row=3, column=1)
 
-    beep_button.grid(row=3, column=0)
-    tone_button.grid(row=3, column=1)
-    phrase_button.grid(row=3, column=3)
+    beep_button.grid(row=1, column=4)
+    tone_button.grid(row=2, column=4)
+    phrase_button.grid(row=3, column=4)
 
     beep_button["command"] = lambda: handle_beep(number_entry, mqtt_sender)
     tone_button["command"] = lambda: handle_play_tone(frequency_entry, duration_entry, mqtt_sender)
