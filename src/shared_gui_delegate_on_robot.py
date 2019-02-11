@@ -47,13 +47,13 @@ class ResponderToGUIMessages(object):
 
     def beep(self, number):
         for k in range(int(number) + 1):
-            self.robot.sound_system.beeper.beep()
+            self.robot.sound_system.beeper.beep().wait()
 
     def play_tone(self, frequency, duration):
-        self.robot.sound_system.tone_maker.play_tone(int(frequency), int(duration))
+        self.robot.sound_system.tone_maker.play_tone(int(frequency), int(duration)).wait()
 
     def speak(self, phrase):
-        self.robot.sound_system.speech_maker.speak(phrase)
+        self.robot.sound_system.speech_maker.speak(phrase).wait()
 
     def quit(self):
         self.stop_program = True
