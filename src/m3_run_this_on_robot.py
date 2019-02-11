@@ -21,6 +21,7 @@ def main():
     # run_test_move()
     # run_test_beep()
     # real_thing()
+    camera()
 
 
 def run_test_arm():
@@ -43,6 +44,8 @@ def real_thing():
     mqtt_receiver.connect_to_pc()
     while True:
         time.sleep(0.01)
+        if delegate.stop_program:
+            break
 
 
 def run_test_move():
@@ -80,6 +83,11 @@ def run_test_beep():
 
     s = rosebot.SpeechMaker()
     s.speak('Hello we are team 8')
+
+
+def camera():
+    robot = rosebot.RoseBot()
+    robot.drive_system.spin_clockwise_until_sees_object(50, 250)
 
 
 # -----------------------------------------------------------------------------

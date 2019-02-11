@@ -246,6 +246,14 @@ class DriveSystem(object):
         of the trained color whose area is at least the given area.
         Requires that the user train the camera on the color of the object.
         """
+        pixy = ev3.Sensor(driver_name='pixy-lego')
+        pixy.mode = 'SIG1'
+        self.go(speed, -speed)
+        while True:
+            print(pixy.value(3) * pixy.value(4))
+            if pixy.value(3) * pixy.value(4) > area:
+                self.stop()
+                break
 
     def spin_counterclockwise_until_sees_object(self, speed, area):
         """
