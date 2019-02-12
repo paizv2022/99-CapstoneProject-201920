@@ -71,7 +71,7 @@ class ResponderToGUIMessages(object):
     def m1_color_is_not(self, color):
         self.robot.drive_system.go_straight_until_color_is_not(color, 100)
 
-    def pick_up_with_proximity_sensor(self, initial, rate_of_increase):
+    def m3_led_proximity_sensor(self, initial, rate_of_increase):
         secs = initial
         threshold = 10
         self.robot.drive_system.go(50, 50)

@@ -20,8 +20,9 @@ def main():
     # run_test_arm()
     # run_test_move()
     # run_test_beep()
-    # real_thing()
-    camera()
+    real_thing()
+    # camera()
+    # pick_up_with_proximity_sensor(.5, .2)
 
 
 def run_test_arm():
@@ -97,6 +98,7 @@ def pick_up_with_proximity_sensor(initial, rate_of_increase):
     robot = rosebot.RoseBot()
     secs = initial
     threshold = 10
+    robot.arm_and_claw.move_arm_to_position(2500)
     robot.drive_system.go(50, 50)
     while True:
         distance = robot.sensor_system.ir_proximity_sensor.get_distance()
