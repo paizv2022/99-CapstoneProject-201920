@@ -6,6 +6,7 @@
      and Valeria Paiz, Samuel VanDenburgh, Justin Heinz.
   Winter term, 2018-2019.
 """
+import time
 
 
 class ResponderToGUIMessages(object):
@@ -70,3 +71,26 @@ class ResponderToGUIMessages(object):
     def m1_color_is_not(self, color):
         self.robot.drive_system.go_straight_until_color_is_not(color, 100)
 
+    def pick_up_with_proximity_sensor(self, initial, rate_of_increase):
+        secs = initial
+        threshold = 10
+        self.robot.drive_system.go(50, 50)
+        while True:
+            distance = self.robot.sensor_system.ir_proximity_sensor.get_distance()
+            # Led Cycle
+            self.robot.led_system.left_led.turn_on()
+            time.sleep(secs / 4)
+            self.robot.led_system.left_led.turn_off()
+            self.robot.led_system.right_led.turn_on()
+            time.sleep(secs / 4)
+            self.robot.led_system.right_led.turn_off()
+            self.robot.led_system.left_led.turn_on()
+            self.robot.led_system.right_led.turn_on()
+            time.sleep(secs / 4)
+            self.robot.led_system.left_led.turn_off()
+            self.robot.led_system.right_led.turn_off()
+            time.sleep(secs / 4)
+            secs = secs - rate_of_increase
+            if distance < threshold:
+                self.robot.drive_system.stop()
+                self.robot.arm_and_claw.raise_arm()

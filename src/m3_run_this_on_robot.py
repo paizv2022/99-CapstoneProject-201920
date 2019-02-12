@@ -93,6 +93,32 @@ def camera():
     robot.drive_system.display_camera_data()
 
 
+def pick_up_with_proximity_sensor(initial, rate_of_increase):
+    robot = rosebot.RoseBot()
+    secs = initial
+    threshold = 10
+    robot.drive_system.go(50, 50)
+    while True:
+        distance = robot.sensor_system.ir_proximity_sensor.get_distance()
+        # Led Cycle
+        robot.led_system.left_led.turn_on()
+        time.sleep(secs/4)
+        robot.led_system.left_led.turn_off()
+        robot.led_system.right_led.turn_on()
+        time.sleep(secs/4)
+        robot.led_system.right_led.turn_off()
+        robot.led_system.left_led.turn_on()
+        robot.led_system.right_led.turn_on()
+        time.sleep(secs/4)
+        robot.led_system.left_led.turn_off()
+        robot.led_system.right_led.turn_off()
+        time.sleep(secs/4)
+        secs = secs - rate_of_increase
+        if distance < threshold:
+            robot.drive_system.stop()
+            robot.arm_and_claw.raise_arm()
+
+
 # -----------------------------------------------------------------------------
 # Calls  main  to start the ball rolling.
 # -----------------------------------------------------------------------------
