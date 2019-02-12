@@ -40,21 +40,17 @@ def main():
     # -------------------------------------------------------------------------
     # Sub-frames for the shared GUI that the team developed:
     # -------------------------------------------------------------------------
-    teleop_frame, arm_frame, control_frame, driver_frame, sound_frame = get_shared_frames(main_frame, mqtt_sender)
+    teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, my_frame = get_shared_frames(main_frame, mqtt_sender)
 
     # -------------------------------------------------------------------------
     # Grid the frames.
     # -------------------------------------------------------------------------
-    grid_frames(teleop_frame, arm_frame, control_frame, driver_frame, sound_frame)
+    grid_frames(teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, my_frame)
 
     # -------------------------------------------------------------------------
     # The event loop:
     # -------------------------------------------------------------------------
     root.mainloop()
-
-
-def get_my_frames():
-    pass
 
 
 def get_shared_frames(main_frame, mqtt_sender):
@@ -63,18 +59,70 @@ def get_shared_frames(main_frame, mqtt_sender):
     control_frame = shared_gui.get_control_frame(main_frame, mqtt_sender)
     driver_frame = shared_gui.get_driver_frame(main_frame, mqtt_sender)
     sound_frame = shared_gui.get_sound_frame(main_frame, mqtt_sender)
-    # my_frame = get_my_frames(main_frame, mqtt_sender)
+    color_frames = color_frame(main_frame, mqtt_sender)
 
-    return teleop_frame, arm_frame, control_frame, driver_frame, sound_frame
+    return teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, color_frames
 
 
-def grid_frames(teleop_frame, arm_frame, control_frame, driver_frame, sound_frame):
+def grid_frames(teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, color_frames):
     teleop_frame.grid(row=0, column=0)
     arm_frame.grid(row=1, column=0)
     driver_frame.grid(row=2, column=0)
     sound_frame.grid(row=3, column=0)
     control_frame.grid(row=4, column=0)
-    # my_frame.grid(row=1, column=0)
+    color_frames.grid(row=0, column=1)
+
+
+def color_frame(window, mqtt_sender):
+    frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
+    frame.grid()
+
+    frame_label = ttk.Label(frame, text='Color Sensor')
+    intensity_label = ttk.Label(frame, text='Intensity:')
+    color_label = ttk.Label(frame, text='Color:')
+    go_label = ttk.Label(frame, text='Go Until:')
+
+    intensity_entry = ttk.Entry(frame, width=8)
+    color_entry = ttk.Entry(frame, width=8)
+
+    greater_int_button = ttk.Button(frame, text='Intensity is Greater')
+    smaller_int_button = ttk.Button(frame, text='Intensity is Smaller')
+    is_color_button = ttk.Button(frame, text='Color is')
+    is_not_color_button = ttk.Button(frame, text='Color is Not')
+
+    frame_label.grid(row=0, column=3)
+    intensity_label.grid(row=1, column=0)
+    intensity_entry.grid(row=1, column=1)
+    color_label.grid(row=2, column=0)
+    color_entry.grid(row=2, column=1)
+    go_label.grid(row=1, column=2)
+    greater_int_button.grid(row=1, column=3)
+    smaller_int_button.grid(row=1, column=4)
+    is_color_button.grid(row=2, column=3)
+    is_not_color_button.grid(row=2, column=4)
+
+    greater_int_button["command"] = lambda: handle_greater_int(mqtt_sender, intensity_entry)
+    smaller_int_button["command"] = lambda: handle_smaller_int(mqtt_sender, intensity_entry)
+    is_color_button["command"] = lambda: handle_is_color(mqtt_sender, color_entry)
+    is_not_color_button["command"] = lambda: handle_is_not_color(mqtt_sender, color_entry)
+
+    return frame
+
+
+def handle_greater_int(mqtt_sender, intensity_entry):
+    mqtt_sender.send_message("m1_greater_intensity", [intensity_entry.get()])
+
+
+def handle_smaller_int(mqtt_sender, intensity_entry):
+    mqtt_sender.send_message("m1_smaller_intensity", [intensity_entry.get()])
+
+
+def handle_is_color(mqtt_sender, color_entry):
+    mqtt_sender.send_message("m1_color_is", [color_entry.get()])
+
+
+def handle_is_not_color(mqtt_sender, color_entry):
+    mqtt_sender.send_message("m1_color_is_not", [color_entry.get()])
 
 
 # -----------------------------------------------------------------------------

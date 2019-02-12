@@ -58,3 +58,15 @@ class ResponderToGUIMessages(object):
     def quit(self):
         self.stop_program = True
 
+    def m1_greater_intensity(self, intensity_entry):
+        self.robot.drive_system.go_straight_until_intensity_is_greater_than(int(intensity_entry))
+
+    def m1_smaller_intensity(self, intensity_entry):
+        self.robot.drive_system.go_straight_until_intensity_is_less_than(int(intensity_entry))
+
+    def m1_color_is(self, color):
+        self.robot.drive_system.go_straight_until_color_is(color, 100)
+
+    def m1_color_is_not(self, color):
+        self.robot.drive_system.go_straight_until_color_is_not(color, 100)
+

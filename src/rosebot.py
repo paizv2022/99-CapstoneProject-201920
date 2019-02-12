@@ -231,6 +231,7 @@ class DriveSystem(object):
         Assumes that the Beacon is turned on and placed straight ahead.
         """
 
+
     # -------------------------------------------------------------------------
     # Methods for driving that use the camera.
     # -------------------------------------------------------------------------
