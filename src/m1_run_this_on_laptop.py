@@ -40,12 +40,12 @@ def main():
     # -------------------------------------------------------------------------
     # Sub-frames for the shared GUI that the team developed:
     # -------------------------------------------------------------------------
-    teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, my_frame = get_shared_frames(main_frame, mqtt_sender)
+    teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, colors_frame, collect_frames = get_shared_frames(main_frame, mqtt_sender)
 
     # -------------------------------------------------------------------------
     # Grid the frames.
     # -------------------------------------------------------------------------
-    grid_frames(teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, my_frame)
+    grid_frames(teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, colors_frame, collect_frames)
 
     # -------------------------------------------------------------------------
     # The event loop:
@@ -60,17 +60,19 @@ def get_shared_frames(main_frame, mqtt_sender):
     driver_frame = shared_gui.get_driver_frame(main_frame, mqtt_sender)
     sound_frame = shared_gui.get_sound_frame(main_frame, mqtt_sender)
     color_frames = color_frame(main_frame, mqtt_sender)
+    collect_frames = collect_frame(main_frame, mqtt_sender)
 
-    return teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, color_frames
+    return teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, color_frames, collect_frames
 
 
-def grid_frames(teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, color_frames):
+def grid_frames(teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, color_frames, collect_frames):
     teleop_frame.grid(row=0, column=0)
     arm_frame.grid(row=1, column=0)
     driver_frame.grid(row=2, column=0)
     sound_frame.grid(row=3, column=0)
     control_frame.grid(row=4, column=0)
     color_frames.grid(row=0, column=1)
+    collect_frames.grid(row=1, column=1)
 
 
 def color_frame(window, mqtt_sender):
@@ -105,6 +107,31 @@ def color_frame(window, mqtt_sender):
     smaller_int_button["command"] = lambda: handle_smaller_int(mqtt_sender, intensity_entry)
     is_color_button["command"] = lambda: handle_is_color(mqtt_sender, color_entry)
     is_not_color_button["command"] = lambda: handle_is_not_color(mqtt_sender, color_entry)
+
+    return frame
+
+
+def collect_frame(window, mqtt_sender):
+    frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
+    frame.grid()
+
+    frame_label = ttk.Label(frame, text='Collect Objects')
+    speed_label = ttk.Label(frame, text='Speed:')
+    direction_label = ttk.Label(frame, text='Direction (CW or CCW):')
+
+    speed_entry = ttk.Entry(frame, width=8)
+    direction_entry = ttk.Entry(frame, width=8)
+
+    pick_up_button = ttk.Button(frame, text='Pick Up Object')
+    camera_pick_up_button = ttk.Button(frame, text='Pick Up Object with Camera')
+
+    frame_label.grid(row=0, column=1)
+    speed_label.grid(row=1, column=0)
+    direction_label.grid(row=2, column=0)
+    speed_entry.grid(row=1, column=2)
+    direction_entry.grid(row=2, column=2)
+    pick_up_button.grid(row=3, column=0)
+    camera_pick_up_button.grid(row=3, column=2)
 
     return frame
 

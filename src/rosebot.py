@@ -231,7 +231,6 @@ class DriveSystem(object):
         Assumes that the Beacon is turned on and placed straight ahead.
         """
 
-
     # -------------------------------------------------------------------------
     # Methods for driving that use the camera.
     # -------------------------------------------------------------------------
@@ -375,7 +374,7 @@ class SensorSystem(object):
         self.touch_sensor = TouchSensor(1)
         self.color_sensor = ColorSensor(3)
         self.ir_proximity_sensor = InfraredProximitySensor(4)
-        self.camera = Camera()
+        # self.camera = Camera()
         # self.ir_beacon_sensor = InfraredBeaconSensor(4)
         # self.beacon_system =
         # self.display_system =
@@ -697,6 +696,7 @@ class Camera(object):
 
     def __init__(self, port=ev3.INPUT_2):
         try:
+            print("Trying")
             self.low_level_camera = ev3.Sensor(port, driver_name="pixy-lego")
         except AssertionError:
             print("Is the camera plugged into port 2?")

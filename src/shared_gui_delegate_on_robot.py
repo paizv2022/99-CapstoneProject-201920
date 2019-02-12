@@ -47,7 +47,7 @@ class ResponderToGUIMessages(object):
         self.robot.drive_system.go_straight_for_inches_using_time(int(inches), int(speed))
 
     def beep(self, number):
-        for k in range(int(number) + 1):
+        for k in range(int(number)):
             self.robot.sound_system.beeper.beep().wait()
 
     def play_tone(self, frequency, duration):
