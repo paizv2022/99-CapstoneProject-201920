@@ -20,8 +20,8 @@ def main():
     # run_test_arm()
     # run_test_move()
     # run_test_beep()
-    real_thing()
-    # camera()
+    # real_thing()
+    camera()
     # pick_up_with_proximity_sensor(2, .3)
     # led_test()
 
