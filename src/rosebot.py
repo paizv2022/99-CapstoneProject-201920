@@ -270,13 +270,7 @@ class DriveSystem(object):
         Displays on the GUI the Blob data of the Blob that the camera sees
         (if any).
         """
-        # correction: PRINT THE BLOB INSTEAD OF DISPLAYING ON THE GUI
-        pixy = ev3.Sensor(driver_name='pixy-lego')
-        pixy.mode = 'SIG1'
-        print('Value 1: X', pixy.value(1))
-        print('Value 1: Y', pixy.value(2))
-        print('Value 1: Width', pixy.value(3))
-        print('Value 1: Height', pixy.value(4))
+        print(self.sensor_system.camera.get_biggest_blob())
 
     def spin_clockwise_until_sees_object(self, speed, area):
         """
@@ -284,12 +278,12 @@ class DriveSystem(object):
         of the trained color whose area is at least the given area.
         Requires that the user train the camera on the color of the object.
         """
-        pixy = ev3.Sensor(driver_name='pixy-lego')
-        pixy.mode = 'SIG1'
         self.go(speed, -speed)
-        actual_area = pixy.value(3) * pixy.value(4)
         while True:
+            blob = self.sensor_system.camera.get_biggest_blob()
+            actual_area = blob.get_area()
             print(actual_area)
+            time.sleep(.5)
             if actual_area > area:
                 self.stop()
                 break
@@ -300,12 +294,12 @@ class DriveSystem(object):
         of the trained color whose area is at least the given area.
         Requires that the user train the camera on the color of the object.
         """
-        pixy = ev3.Sensor(driver_name='pixy-lego')
-        pixy.mode = 'SIG1'
         self.go(-speed, speed)
-        actual_area = pixy.value(3) * pixy.value(4)
         while True:
+            blob = self.sensor_system.camera.get_biggest_blob()
+            actual_area = blob.get_area()
             print(actual_area)
+            time.sleep(.5)
             if actual_area > area:
                 self.stop()
                 break

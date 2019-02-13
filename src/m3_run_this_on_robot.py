@@ -91,7 +91,7 @@ def camera():
     robot = rosebot.RoseBot()
     robot.drive_system.display_camera_data()
     robot.drive_system.spin_clockwise_until_sees_object(50, 250)
-    robot.drive_system.spin_counterclockwise_until_sees_object(50, 250)
+    # robot.drive_system.spin_counterclockwise_until_sees_object(50, 250)
     robot.drive_system.display_camera_data()
 
 

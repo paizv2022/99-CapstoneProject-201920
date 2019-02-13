@@ -71,8 +71,8 @@ def grid_frames(teleop_frame, arm_frame, control_frame, driver_frame, sound_fram
     driver_frame.grid(row=2, column=0)
     sound_frame.grid(row=3, column=0)
     control_frame.grid(row=4, column=0)
-    color_frames.grid(row=0, column=1)
-    collect_frames.grid(row=1, column=1)
+    collect_frames.grid(row=0, column=1)
+    color_frames.grid(row=1, column=1)
 
 
 def color_frame(window, mqtt_sender):
@@ -83,6 +83,8 @@ def color_frame(window, mqtt_sender):
     intensity_label = ttk.Label(frame, text='Intensity:')
     color_label = ttk.Label(frame, text='Color:')
     go_label = ttk.Label(frame, text='Go Until:')
+    blank_label = ttk.Label(frame, text='')
+    go2_label = ttk.Label(frame, text='Go Until:')
 
     intensity_entry = ttk.Entry(frame, width=8)
     color_entry = ttk.Entry(frame, width=8)
@@ -95,13 +97,15 @@ def color_frame(window, mqtt_sender):
     frame_label.grid(row=0, column=3)
     intensity_label.grid(row=1, column=0)
     intensity_entry.grid(row=1, column=1)
-    color_label.grid(row=2, column=0)
-    color_entry.grid(row=2, column=1)
+    color_label.grid(row=3, column=0)
+    color_entry.grid(row=3, column=1)
     go_label.grid(row=1, column=2)
+    go2_label.grid(row=3, column=2)
     greater_int_button.grid(row=1, column=3)
     smaller_int_button.grid(row=1, column=4)
-    is_color_button.grid(row=2, column=3)
-    is_not_color_button.grid(row=2, column=4)
+    is_color_button.grid(row=3, column=3)
+    is_not_color_button.grid(row=3, column=4)
+    blank_label.grid(row=2, column=0)
 
     greater_int_button["command"] = lambda: handle_greater_int(mqtt_sender, intensity_entry)
     smaller_int_button["command"] = lambda: handle_smaller_int(mqtt_sender, intensity_entry)
@@ -118,9 +122,13 @@ def collect_frame(window, mqtt_sender):
     frame_label = ttk.Label(frame, text='Collect Objects')
     speed_label = ttk.Label(frame, text='Speed:')
     direction_label = ttk.Label(frame, text='Direction (CW or CCW):')
+    initial_label = ttk.Label(frame, text='Initial Rate:')
+    rate_label = ttk.Label(frame, text='Increase Rate:')
 
     speed_entry = ttk.Entry(frame, width=8)
     direction_entry = ttk.Entry(frame, width=8)
+    initial_entry = ttk.Entry(frame, width=8)
+    rate_entry = ttk.Entry(frame, width=8)
 
     pick_up_button = ttk.Button(frame, text='Pick Up Object')
     camera_pick_up_button = ttk.Button(frame, text='Pick Up Object with Camera')
@@ -128,10 +136,17 @@ def collect_frame(window, mqtt_sender):
     frame_label.grid(row=0, column=1)
     speed_label.grid(row=1, column=0)
     direction_label.grid(row=2, column=0)
+    initial_label.grid(row=3, column=0)
+    rate_label.grid(row=4, column=0)
     speed_entry.grid(row=1, column=2)
     direction_entry.grid(row=2, column=2)
-    pick_up_button.grid(row=3, column=0)
-    camera_pick_up_button.grid(row=3, column=2)
+    initial_entry.grid(row=3, column=2)
+    rate_entry.grid(row=4, column=2)
+    pick_up_button.grid(row=5, column=0)
+    camera_pick_up_button.grid(row=5, column=2)
+
+    pick_up_button["command"] = lambda: handle_pick_up(mqtt_sender, initial_entry, rate_entry, speed_entry)
+    camera_pick_up_button["command"] = lambda: handle_camera_pick_up(mqtt_sender, initial_entry, rate_entry, speed_entry, direction_entry)
 
     return frame
 
@@ -150,6 +165,14 @@ def handle_is_color(mqtt_sender, color_entry):
 
 def handle_is_not_color(mqtt_sender, color_entry):
     mqtt_sender.send_message("m1_color_is_not", [color_entry.get()])
+
+
+def handle_pick_up(mqtt_sender, initial_entry, rate_entry, speed_entry):
+    mqtt_sender.send_message("m1_pick_up", [initial_entry.get(), rate_entry.get(), speed_entry.get()])
+
+
+def handle_camera_pick_up(mqtt_sender, initial_entry, rate_entry, speed_entry, direction_entry):
+    mqtt_sender.send_message("m1_camera_pick_up", [initial_entry.get(), rate_entry.get(), speed_entry.get(), direction_entry.get()])
 
 
 # -----------------------------------------------------------------------------
