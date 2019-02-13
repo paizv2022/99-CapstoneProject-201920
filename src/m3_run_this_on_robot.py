@@ -20,10 +20,11 @@ def main():
     # run_test_arm()
     # run_test_move()
     # run_test_beep()
-    real_thing()
+    # real_thing()
     # camera()
     # pick_up_with_proximity_sensor(2, .3)
     # led_test()
+    m3_chose_pick_up(1, .2, 'Clockwise', 30, 250, 'LED')
 
 
 def run_test_arm():
@@ -95,34 +96,41 @@ def camera():
     robot.drive_system.display_camera_data()
 
 
-def pick_up_with_proximity_sensor(initial, rate_of_increase):
+def m3_led_proximity_sensor(initial, rate_of_increase):
     robot = rosebot.RoseBot()
-    secs = initial
+    secs = float(initial)
     threshold = 20
     robot.led_system.left_led.turn_off()
     robot.led_system.right_led.turn_off()
-    robot.arm_and_claw.move_arm_to_position(0)
+    robot.arm_and_claw.calibrate_arm()
     robot.drive_system.go(50, 50)
     while True:
         distance = robot.sensor_system.ir_proximity_sensor.get_distance()
+        print(distance)
         # Led Cycle
         robot.led_system.left_led.turn_on()
-        time.sleep(secs/4)
+        time.sleep(secs / 4)
         robot.led_system.left_led.turn_off()
         robot.led_system.right_led.turn_on()
-        time.sleep(secs/4)
+        time.sleep(secs / 4)
         robot.led_system.right_led.turn_off()
         robot.led_system.left_led.turn_on()
         robot.led_system.right_led.turn_on()
-        time.sleep(secs/4)
+        time.sleep(secs / 4)
         robot.led_system.left_led.turn_off()
         robot.led_system.right_led.turn_off()
-        time.sleep(secs/4)
-        secs = secs - rate_of_increase
+        time.sleep(secs / 4)
         if distance < threshold:
             robot.drive_system.stop()
             robot.arm_and_claw.raise_arm()
             break
+        increment = float(initial)/float(rate_of_increase)
+        sub = 100/increment
+        pos = 100 - distance
+        x = pos/sub
+        secs = initial - (float(rate_of_increase) * x)
+        if secs < 0:
+            secs = 0
 
 
 def led_test():
@@ -138,6 +146,15 @@ def led_test():
         time.sleep(3)
 
 
+def m3_chose_pick_up(initial, rate_of_increase, direction, speed, area, string):
+    robot = rosebot.RoseBot()
+    if direction == 'Clockwise':
+        robot.drive_system.spin_clockwise_until_sees_object(speed, area)
+    elif direction == 'Counterclockwise':
+        robot.drive_system.spin_counterclockwise_until_sees_object(speed, area)
+    time.sleep(3)
+    if string == 'LED':
+        m3_led_proximity_sensor(initial, rate_of_increase)
 
 
 # -----------------------------------------------------------------------------

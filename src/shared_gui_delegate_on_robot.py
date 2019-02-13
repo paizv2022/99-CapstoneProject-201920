@@ -116,8 +116,11 @@ class ResponderToGUIMessages(object):
                 self.robot.drive_system.stop()
                 self.robot.arm_and_claw.raise_arm()
                 break
-            increment = int(distance / 10)
-            secs = increment * float(rate_of_increase)
+            increment = float(initial)/float(rate_of_increase)
+            sub = 100/increment
+            pos = 100 - distance
+            x = pos/sub
+            secs = initial - (float(rate_of_increase) * x)
             if secs < 0:
                 secs = 0
 
