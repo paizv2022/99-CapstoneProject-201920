@@ -17,8 +17,8 @@ def main():
       1. Makes the EV3 robot to various things.
       2. Communicates via MQTT with the GUI code that runs on the LAPTOP.
     """
-    #robot_run()
-    infrared_test()
+    robot_run()
+    #infrared_test()
 
 def robot_run():
     robot = rosebot.RoseBot()
@@ -37,9 +37,8 @@ def infrared_test():
     mqtt_receiver = com.MqttClient(delegate)
     mqtt_receiver.connect_to_pc()
 
-    robot.drive_system.go_forward_until_distance_is_less_than(2, 50)
-    #robot.drive_system.go_backward_until_distance_is_greater_than(9, 100)
-    #robot.drive_system.go_until_distance_is_within(2, 5, 50)
+    robot.drive_system.go_forward_until_distance_is_less_than(5, 50)
+
 # -----------------------------------------------------------------------------
 # Calls  main  to start the ball rolling.
 # -----------------------------------------------------------------------------

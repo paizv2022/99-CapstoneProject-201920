@@ -160,16 +160,24 @@ def grid_frames(teleop_frame, arm_frame, control_frame, driver_frame, sound_fram
 ###############################################################################
 def handle_go_until_less_than(mqtt_sender, inches_entry, speed_entry):
     print("Driving forward until I am less than", inches_entry.get(), "inches from an object at a speed of", speed_entry.get())
-    mqtt_sender.send_message("go_forward_until_distance_is_less_than", [inches_entry.get(), speed_entry.get()])
+    mqtt_sender.send_message("go_forward_until_distance_is_less_than", [float(inches_entry.get()), float(speed_entry.get())])
 
 def handle_go_until_greater_than(mqtt_sender, inches_entry, speed_entry):
     print("Driving backward until I am greater than", inches_entry.get(), "inches from an object at a speed of", speed_entry.get())
-    mqtt_sender.send_message("go_backward_until_distance_is_greater_than", [inches_entry.get(), speed_entry.get()])
+    mqtt_sender.send_message("go_backward_until_distance_is_greater_than", [float(inches_entry.get()), float(speed_entry.get())])
 
 def handle_go_until_within(mqtt_sender, range_entry, inches_entry, speed_entry):
     print("Driving forwards and backwards until I am within", inches_entry.get(), "+ or - ", range_entry.get(), "inches from an object at a speed of", speed_entry.get())
-    mqtt_sender.send_message("go_until_distance_is_within", [range_entry.get() ,inches_entry.get(), speed_entry.get()])
+    mqtt_sender.send_message("go_until_distance_is_within", [float(range_entry.get()) ,float(inches_entry.get()), float(speed_entry.get())])
 
+###############################################################################
+# Handlers for Buttons in the Tone frame
+###############################################################################
+def handle_start_tone():
+    pass
+
+def handle_stop_tone():
+    pass
 # -----------------------------------------------------------------------------
 # Calls  main  to start the ball rolling.
 # -----------------------------------------------------------------------------

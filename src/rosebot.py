@@ -189,13 +189,13 @@ class DriveSystem(object):
         Goes forward at the given speed until the robot is less than
         the given number of inches from the nearest object that it senses.
         """
-        distance = self.sensor_system.ir_proximity_sensor.get_distance_in_inches()
 
         while True:
+            distance = self.sensor_system.ir_proximity_sensor.get_distance_in_inches()
+            print('distance', distance)
             self.go(speed, speed)
             if distance <= inches:
                 break
-            print("Distance", distance)
 
         self.stop()
 
@@ -206,12 +206,17 @@ class DriveSystem(object):
         the given number of inches from the nearest object that it senses.
         Assumes that it senses an object when it starts.
         """
-        distance = self.sensor_system.ir_proximity_sensor.get_distance_in_inches()
-
-        # checks distance and drives backwards if greater than inches
+        a = 0
+        b = 0
         while True:
+            distance = self.sensor_system.ir_proximity_sensor.get_distance_in_inches()
+            a = distance
+            print('distance')
+            print(distance)
             self.go(-speed, -speed)
-            if distance >= inches:
+            time.sleep(0.2)
+            b = distance
+            if (a + b) / 2 >= inches:
                 break
 
         self.stop()
@@ -226,15 +231,23 @@ class DriveSystem(object):
         the robot should move until it is between 6.8 and 7.4 inches
         from the object.
         """
-        # converts sensor reading to inches
-        cm = InfraredBeaconSensor.get_distance_to_beacon() / 0.7
-        distance = cm * 0.39
+        a = 0
+        b = 0
 
-        # checks distance and drives backwards if greater than range, and forwards if less than range
-        while distance <= (inches - delta):
-            self.go(speed, speed)
-        while distance >= (inches + delta):
-            self.go(-speed, -speed)
+        while True:
+            distance = self.sensor_system.ir_proximity_sensor.get_distance_in_inches()
+            a = distance
+            print('distance')
+            print(distance)
+            time.sleep(0.2)
+            b = distance
+            average = (a + b) / 2
+            if average < (inches - delta):
+                self.go(-speed, -speed)
+            elif average > (inches + delta):
+                self.go(speed, speed)
+            else:
+                break
 
         self.stop()
 
