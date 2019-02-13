@@ -73,7 +73,7 @@ class ResponderToGUIMessages(object):
 
     def m3_led_proximity_sensor(self, initial, rate_of_increase):
         secs = float(initial)
-        threshold = 30
+        threshold = 20
         self.robot.led_system.left_led.turn_off()
         self.robot.led_system.right_led.turn_off()
         self.robot.arm_and_claw.move_arm_to_position(0)
@@ -94,10 +94,11 @@ class ResponderToGUIMessages(object):
             self.robot.led_system.left_led.turn_off()
             self.robot.led_system.right_led.turn_off()
             time.sleep(secs / 4)
-            secs = secs - float(rate_of_increase)
-            if secs < 0:
-                secs = 0
             if distance < threshold:
                 self.robot.drive_system.stop()
                 self.robot.arm_and_claw.raise_arm()
                 break
+            increment = int(distance / 10)
+            secs = increment * float(rate_of_increase)
+            if secs < 0:
+                secs = 0
