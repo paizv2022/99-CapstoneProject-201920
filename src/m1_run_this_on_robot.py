@@ -17,9 +17,7 @@ def main():
       1. Makes the EV3 robot do various things.
       2. Communicates via MQTT with the GUI code that runs on the LAPTOP.
     """
-    print("Attempting Connection")
     robot_run()
-    print("Ended Connection")
 
 
 def test():
@@ -33,12 +31,10 @@ def robot_run():
     mqtt_receiver = com.MqttClient(delegate)
     mqtt_receiver.connect_to_pc()
 
-    robot.drive_system.go_straight_until_intensity_is_greater_than(50, 100)
-
-    # while True:
-    #     if delegate.stop_program:
-    #         break
-    #     time.sleep(0.01)
+    while True:
+        if delegate.stop_program:
+            break
+        time.sleep(0.01)
 
 
 # -----------------------------------------------------------------------------

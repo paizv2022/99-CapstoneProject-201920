@@ -71,8 +71,15 @@ class ResponderToGUIMessages(object):
     def m1_color_is_not(self, color):
         self.robot.drive_system.go_straight_until_color_is_not(color, 100)
 
-    def m1_pick_up(self, frequency, rate):
-        pass
+    def m1_pick_up(self, initial, rate, speed):
+        self.robot.drive_system.go(speed)
+        while self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches() > 1:
+            distance = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
+            seconds = initial + (rate * distance)
+            self.robot.sound_system.beeper.beep()
+            time.sleep(seconds)
+        self.robot.drive_system.stop()
+        self.robot.arm_and_claw.raise_arm()
 
     def m1_camera_pick_up(self, speed, direction):
         pass
