@@ -20,11 +20,11 @@ def main():
     # run_test_arm()
     # run_test_move()
     # run_test_beep()
-    # real_thing()
+    real_thing()
     # camera()
     # pick_up_with_proximity_sensor(2, .3)
     # led_test()
-    m3_chose_pick_up(1, .2, 'Clockwise', 30, 250, 'LED')
+    # m3_chose_pick_up(1, .2, 'Clockwise', 30, 250, 'LED')
 
 
 def run_test_arm():
