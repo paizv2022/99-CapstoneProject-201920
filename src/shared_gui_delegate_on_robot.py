@@ -76,7 +76,7 @@ class ResponderToGUIMessages(object):
         threshold = 20
         self.robot.led_system.left_led.turn_off()
         self.robot.led_system.right_led.turn_off()
-        self.robot.arm_and_claw.move_arm_to_position(0)
+        self.robot.arm_and_claw.calibrate_arm()
         self.robot.drive_system.go(50, 50)
         while True:
             distance = self.robot.sensor_system.ir_proximity_sensor.get_distance()
