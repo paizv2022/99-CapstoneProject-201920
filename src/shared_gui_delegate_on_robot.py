@@ -141,4 +141,3 @@ class ResponderToGUIMessages(object):
             time.sleep(.2)
             b = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
             average = (a + b) / 2
-                break
