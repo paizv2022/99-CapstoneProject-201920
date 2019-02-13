@@ -78,7 +78,6 @@ class ResponderToGUIMessages(object):
         speed = int(speed)
         self.robot.drive_system.go(speed, speed)
         while True:
-            print(self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches())
             if self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches() <= 1.5:
                 break
             distance = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
