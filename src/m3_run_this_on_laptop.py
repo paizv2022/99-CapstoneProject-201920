@@ -112,19 +112,25 @@ def get_camera_frame(window, mqtt_sender):
     # Construct the widgets on the frame:
     frame_label1 = ttk.Label(frame, text="Turing speed: ")
     frame_label2 = ttk.Label(frame, text="Area: ")
+    frame_label3 = ttk.Label(frame, text='Spin Until Sees Object')
     speed_entry = ttk.Entry(frame, width=8)
     area_entry = ttk.Entry(frame, width=8)
-    go_button = ttk.Button(frame, text='Go')
+    clockwise_button = ttk.Button(frame, text='Clockwise')
+    counter_clockwise_button = ttk.Button(frame, text='Counter Clockwise')
+
 
     # Grid the widgets:
-    frame_label1.grid(row=0, column=0)
-    frame_label2.grid(row=0, column=3)
-    speed_entry.grid(row=0, column=1)
-    area_entry.grid(row=0, column=4)
-    go_button.grid(row=0, column=5)
+    frame_label3.grid(row=0, column=1)
+    frame_label1.grid(row=1, column=0)
+    frame_label2.grid(row=1, column=3)
+    speed_entry.grid(row=1, column=1)
+    area_entry.grid(row=1, column=4)
+    clockwise_button.grid(row=2, column=4)
+    counter_clockwise_button.grid(row=2, column=1)
 
     # Set the Button callbacks:
-    go_button["command"] = lambda: handle_camera(speed_entry, area_entry, mqtt_sender)
+    clockwise_button["command"] = lambda: handle_camera_clockwise(speed_entry, area_entry, mqtt_sender)
+    counter_clockwise_button['command'] = lambda :handle_camera_counterclockwise(speed_entry, area_entry, mqtt_sender)
 
     return frame
 
@@ -134,9 +140,14 @@ def handle_pick_up_with_proximity_sensor(initial_entry, rate_of_increase_entry, 
     mqtt_sender.send_message("m3_led_proximity_sensor", [initial_entry.get(), rate_of_increase_entry.get()])
 
 
-def handle_camera(speed_entry, area_entry, mqtt_sender):
+def handle_camera_clockwise(speed_entry, area_entry, mqtt_sender):
     print('Turning Speed:', speed_entry.get(), 'Area:', area_entry.get())
-    mqtt_sender.send_message('m3_camera_area', [speed_entry.get(), area_entry.get()])
+    mqtt_sender.send_message('m3_spin_clockwise_until_sees_object', [speed_entry.get(), area_entry.get()])
+
+
+def handle_camera_counterclockwise(speed_entry, area_entry, mqtt_sender):
+    print('Turning Speed:', speed_entry.get(), 'Area:', area_entry.get())
+    mqtt_sender.send_message('m3_spin_counterclockwise_until_sees_object', [speed_entry.get(), area_entry.get()])
 
 # -----------------------------------------------------------------------------
 # Calls  main  to start the ball rolling.

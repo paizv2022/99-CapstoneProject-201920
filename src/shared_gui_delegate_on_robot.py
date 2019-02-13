@@ -121,11 +121,12 @@ class ResponderToGUIMessages(object):
             if secs < 0:
                 secs = 0
 
-    def go_forward_until_distance_is_less_than(self, inches, speed):
-        self.robot.drive_system.go_forward_until_distance_is_less_than(inches, speed)
+    def m3_spin_counterclockwise_until_sees_object(self, speed, area):
+        speed = int(speed)
+        area = int(area)
+        self.robot.drive_system.spin_counterclockwise_until_sees_object(speed, area)
 
-    def go_backward_until_distance_is_greater_than(self, inches, speed):
-        self.robot.drive_system.go_backward_until_distance_is_greater_than(inches, speed)
-
-    def go_until_distance_is_within(self, delta, inches, speed):
-        self.robot.drive_system.go_until_distance_is_within(delta, inches, speed)
+    def m3_spin_clockwise_until_sees_object(self, speed, area):
+        speed = int(speed)
+        area = int(area)
+        self.robot.drive_system.spin_clockwise_until_sees_object(speed, area)
