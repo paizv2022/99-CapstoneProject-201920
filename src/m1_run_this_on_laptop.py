@@ -83,6 +83,8 @@ def color_frame(window, mqtt_sender):
     intensity_label = ttk.Label(frame, text='Intensity:')
     color_label = ttk.Label(frame, text='Color:')
     go_label = ttk.Label(frame, text='Go Until:')
+    blank_label = ttk.Label(frame, text='')
+    go2_label = ttk.Label(frame, text='Go Until:')
 
     intensity_entry = ttk.Entry(frame, width=8)
     color_entry = ttk.Entry(frame, width=8)
@@ -95,13 +97,15 @@ def color_frame(window, mqtt_sender):
     frame_label.grid(row=0, column=3)
     intensity_label.grid(row=1, column=0)
     intensity_entry.grid(row=1, column=1)
-    color_label.grid(row=2, column=0)
-    color_entry.grid(row=2, column=1)
+    color_label.grid(row=3, column=0)
+    color_entry.grid(row=3, column=1)
     go_label.grid(row=1, column=2)
+    go2_label.grid(row=3, column=2)
     greater_int_button.grid(row=1, column=3)
     smaller_int_button.grid(row=1, column=4)
-    is_color_button.grid(row=2, column=3)
-    is_not_color_button.grid(row=2, column=4)
+    is_color_button.grid(row=3, column=3)
+    is_not_color_button.grid(row=3, column=4)
+    blank_label.grid(row=2, column=0)
 
     greater_int_button["command"] = lambda: handle_greater_int(mqtt_sender, intensity_entry)
     smaller_int_button["command"] = lambda: handle_smaller_int(mqtt_sender, intensity_entry)
@@ -142,7 +146,7 @@ def collect_frame(window, mqtt_sender):
     camera_pick_up_button.grid(row=5, column=2)
 
     pick_up_button["command"] = lambda: handle_pick_up(mqtt_sender, initial_entry, rate_entry, speed_entry)
-    camera_pick_up_button["command"] = lambda: handle_camera_pick_up(mqtt_sender, speed_entry, direction_entry)
+    camera_pick_up_button["command"] = lambda: handle_camera_pick_up(mqtt_sender, initial_entry, rate_entry, speed_entry, direction_entry)
 
     return frame
 
@@ -167,8 +171,8 @@ def handle_pick_up(mqtt_sender, initial_entry, rate_entry, speed_entry):
     mqtt_sender.send_message("m1_pick_up", [initial_entry.get(), rate_entry.get(), speed_entry.get()])
 
 
-def handle_camera_pick_up(mqtt_sender, speed_entry, direction_entry):
-    mqtt_sender.send_message("m1_camera_pick_up", [speed_entry.get(), direction_entry.get()])
+def handle_camera_pick_up(mqtt_sender, initial_entry, rate_entry, speed_entry, direction_entry):
+    mqtt_sender.send_message("m1_camera_pick_up", [initial_entry.get(), rate_entry.get(), speed_entry.get(), direction_entry.get()])
 
 
 # -----------------------------------------------------------------------------
