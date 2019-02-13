@@ -84,7 +84,6 @@ class ResponderToGUIMessages(object):
             distance = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
             value = initial + int(((rate * 10) / (math.sqrt(distance))))
             for k in range(value):
-                print("Beeps: " + str(value) + " Times")
                 self.robot.sound_system.beeper.beep()
         self.robot.drive_system.stop()
         self.robot.arm_and_claw.raise_arm()
