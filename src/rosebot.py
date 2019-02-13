@@ -189,6 +189,16 @@ class DriveSystem(object):
         Goes forward at the given speed until the robot is less than
         the given number of inches from the nearest object that it senses.
         """
+        distance = self.sensor_system.ir_proximity_sensor.get_distance_in_inches()
+
+        while True:
+            self.go(speed, speed)
+            if distance <= inches:
+                break
+            print("Distance", distance)
+
+        self.stop()
+
 
     def go_backward_until_distance_is_greater_than(self, inches, speed):
         """
@@ -196,6 +206,15 @@ class DriveSystem(object):
         the given number of inches from the nearest object that it senses.
         Assumes that it senses an object when it starts.
         """
+        distance = self.sensor_system.ir_proximity_sensor.get_distance_in_inches()
+
+        # checks distance and drives backwards if greater than inches
+        while True:
+            self.go(-speed, -speed)
+            if distance >= inches:
+                break
+
+        self.stop()
 
     def go_until_distance_is_within(self, delta, inches, speed):
         """
@@ -207,6 +226,17 @@ class DriveSystem(object):
         the robot should move until it is between 6.8 and 7.4 inches
         from the object.
         """
+        # converts sensor reading to inches
+        cm = InfraredBeaconSensor.get_distance_to_beacon() / 0.7
+        distance = cm * 0.39
+
+        # checks distance and drives backwards if greater than range, and forwards if less than range
+        while distance <= (inches - delta):
+            self.go(speed, speed)
+        while distance >= (inches + delta):
+            self.go(-speed, -speed)
+
+        self.stop()
 
     # -------------------------------------------------------------------------
     # Methods for driving that use the infrared beacon sensor.
@@ -230,6 +260,7 @@ class DriveSystem(object):
         given number of inches from the Beacon.
         Assumes that the Beacon is turned on and placed straight ahead.
         """
+
 
     # -------------------------------------------------------------------------
     # Methods for driving that use the camera.
@@ -374,7 +405,7 @@ class SensorSystem(object):
         self.touch_sensor = TouchSensor(1)
         self.color_sensor = ColorSensor(3)
         self.ir_proximity_sensor = InfraredProximitySensor(4)
-        # self.camera = Camera()
+        self.camera = Camera()
         # self.ir_beacon_sensor = InfraredBeaconSensor(4)
         # self.beacon_system =
         # self.display_system =
@@ -696,7 +727,6 @@ class Camera(object):
 
     def __init__(self, port=ev3.INPUT_2):
         try:
-            print("Trying")
             self.low_level_camera = ev3.Sensor(port, driver_name="pixy-lego")
         except AssertionError:
             print("Is the camera plugged into port 2?")
