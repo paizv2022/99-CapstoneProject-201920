@@ -112,9 +112,8 @@ def main():
         stop_tone_button.grid(row=3, column=1)
 
         #sets buttons to run functions
-        #start_tone_button["command"] = lambda:
-        #stop_tone_button["command"] = lambda: handle_go_until_greater_than(mqtt_sender, inches_entry,
-        #                                                                          speed_entry)
+        start_tone_button["command"] = lambda: handle_start_tone(mqtt_sender, initial_frequency_entry, frequency_rate_entry)
+        stop_tone_button["command"] = lambda: handle_stop_tone(mqtt_sender)
         return frame
 
 
@@ -173,11 +172,14 @@ def handle_go_until_within(mqtt_sender, range_entry, inches_entry, speed_entry):
 ###############################################################################
 # Handlers for Buttons in the Tone frame
 ###############################################################################
-def handle_start_tone():
-    pass
+def handle_start_tone(mqtt_sender, initial_frequency_entry, frequency_rate_entry):
+    print("Playing a tone corresponding to IR distance starting at", initial_frequency_entry.get(), "Hz nd changing at a rate of", frequency_rate_entry.get(),"Hz per inch")
+    mqtt_sender.send_message("m2_tone_to_distance", [float(initial_frequency_entry.get()), float(frequency_rate_entry.get())])
 
-def handle_stop_tone():
-    pass
+def handle_stop_tone(mqtt_sender):
+    print("Stopping tone")
+    mqtt_sender.send_message("m2_stop_tone")
+
 # -----------------------------------------------------------------------------
 # Calls  main  to start the ball rolling.
 # -----------------------------------------------------------------------------

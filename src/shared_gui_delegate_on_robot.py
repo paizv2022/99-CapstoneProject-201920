@@ -130,3 +130,15 @@ class ResponderToGUIMessages(object):
         speed = int(speed)
         area = int(area)
         self.robot.drive_system.spin_clockwise_until_sees_object(speed, area)
+
+    def m2_tone_to_distance(self, initial_frequency, frequency_rate):
+        average = 0
+        start = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
+        while True:
+            frequency = initial_frequency - (frequency_rate * (average - start))
+            self.robot.sound_system.tone_maker.play_tone(frequency, 100)
+            a = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
+            time.sleep(.2)
+            b = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
+            average = (a + b) / 2
+                break
