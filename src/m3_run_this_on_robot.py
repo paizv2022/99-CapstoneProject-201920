@@ -22,7 +22,8 @@ def main():
     # run_test_beep()
     real_thing()
     # camera()
-    # pick_up_with_proximity_sensor(.5, .2)
+    # pick_up_with_proximity_sensor(2, .3)
+    # led_test()
 
 
 def run_test_arm():
@@ -97,8 +98,10 @@ def camera():
 def pick_up_with_proximity_sensor(initial, rate_of_increase):
     robot = rosebot.RoseBot()
     secs = initial
-    threshold = 10
-    robot.arm_and_claw.move_arm_to_position(2500)
+    threshold = 20
+    robot.led_system.left_led.turn_off()
+    robot.led_system.right_led.turn_off()
+    robot.arm_and_claw.move_arm_to_position(0)
     robot.drive_system.go(50, 50)
     while True:
         distance = robot.sensor_system.ir_proximity_sensor.get_distance()
@@ -119,6 +122,22 @@ def pick_up_with_proximity_sensor(initial, rate_of_increase):
         if distance < threshold:
             robot.drive_system.stop()
             robot.arm_and_claw.raise_arm()
+            break
+
+
+def led_test():
+    while True:
+        robot = rosebot.RoseBot()
+        robot.led_system.left_led.turn_on()
+        time.sleep(3)
+        robot.led_system.left_led.turn_off()
+        time.sleep(3)
+        robot.led_system.right_led.turn_on()
+        time.sleep(3)
+        robot.led_system.right_led.turn_off()
+        time.sleep(3)
+
+
 
 
 # -----------------------------------------------------------------------------

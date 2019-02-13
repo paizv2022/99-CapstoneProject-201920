@@ -72,11 +72,15 @@ class ResponderToGUIMessages(object):
         self.robot.drive_system.go_straight_until_color_is_not(color, 100)
 
     def m3_led_proximity_sensor(self, initial, rate_of_increase):
-        secs = initial
-        threshold = 10
+        secs = float(initial)
+        threshold = 30
+        self.robot.led_system.left_led.turn_off()
+        self.robot.led_system.right_led.turn_off()
+        self.robot.arm_and_claw.move_arm_to_position(0)
         self.robot.drive_system.go(50, 50)
         while True:
             distance = self.robot.sensor_system.ir_proximity_sensor.get_distance()
+            print(distance)
             # Led Cycle
             self.robot.led_system.left_led.turn_on()
             time.sleep(secs / 4)
@@ -90,7 +94,10 @@ class ResponderToGUIMessages(object):
             self.robot.led_system.left_led.turn_off()
             self.robot.led_system.right_led.turn_off()
             time.sleep(secs / 4)
-            secs = secs - rate_of_increase
+            secs = secs - float(rate_of_increase)
+            if secs < 0:
+                secs = 0
             if distance < threshold:
                 self.robot.drive_system.stop()
                 self.robot.arm_and_claw.raise_arm()
+                break
