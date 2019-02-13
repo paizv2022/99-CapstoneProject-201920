@@ -7,6 +7,7 @@
   Winter term, 2018-2019.
 """
 import time
+import math
 
 
 class ResponderToGUIMessages(object):
@@ -60,10 +61,10 @@ class ResponderToGUIMessages(object):
         self.stop_program = True
 
     def m1_greater_intensity(self, intensity_entry):
-        self.robot.drive_system.go_straight_until_intensity_is_greater_than(int(intensity_entry))
+        self.robot.drive_system.go_straight_until_intensity_is_greater_than(int(intensity_entry), 100)
 
     def m1_smaller_intensity(self, intensity_entry):
-        self.robot.drive_system.go_straight_until_intensity_is_less_than(int(intensity_entry))
+        self.robot.drive_system.go_straight_until_intensity_is_less_than(int(intensity_entry), 100)
 
     def m1_color_is(self, color):
         self.robot.drive_system.go_straight_until_color_is(color, 100)
@@ -72,20 +73,27 @@ class ResponderToGUIMessages(object):
         self.robot.drive_system.go_straight_until_color_is_not(color, 100)
 
     def m1_pick_up(self, initial, rate, speed):
-        self.robot.drive_system.go(speed)
-        while self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches() > 1:
+        initial = int(initial)
+        rate = int(rate)
+        speed = int(speed)
+        self.robot.drive_system.go(speed, speed)
+        while True:
+            print(self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches())
+            if self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches() <= 1.5:
+                break
             distance = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
-            seconds = initial + (rate * distance)
-            self.robot.sound_system.beeper.beep()
-            time.sleep(seconds)
+            value = initial + int(((rate * 10) / (math.sqrt(distance))))
+            for k in range(value):
+                print("Beeps: " + str(value) + " Times")
+                self.robot.sound_system.beeper.beep()
         self.robot.drive_system.stop()
         self.robot.arm_and_claw.raise_arm()
 
     def m1_camera_pick_up(self, initial, rate, speed, direction):
         area = 100
-        if direction == CW:
+        if direction == 'CW':
             self.robot.drive_system.spin_clockwise_until_sees_object(speed, area)
-        elif direction == CCW:
+        elif direction == 'CCW':
             self.robot.drive_system.spin_counterclockwise_until_sees_object(speed, area)
         self.m1_pick_up(initial, rate, speed)
 

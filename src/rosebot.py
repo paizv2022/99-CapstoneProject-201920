@@ -199,7 +199,6 @@ class DriveSystem(object):
 
         self.stop()
 
-
     def go_backward_until_distance_is_greater_than(self, inches, speed):
         """
         Goes straight at the given speed until the robot is greater than
@@ -412,7 +411,7 @@ class SensorSystem(object):
         self.touch_sensor = TouchSensor(1)
         self.color_sensor = ColorSensor(3)
         self.ir_proximity_sensor = InfraredProximitySensor(4)
-        self.camera = Camera()
+        # self.camera = Camera()
         # self.ir_beacon_sensor = InfraredBeaconSensor(4)
         # self.beacon_system =
         # self.display_system =
