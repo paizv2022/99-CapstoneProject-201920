@@ -146,15 +146,114 @@ def led_test():
         time.sleep(3)
 
 
-def m3_chose_pick_up(initial, rate_of_increase, direction, speed, area, string):
+def m3_led_pick_up(speed, area, direction, initial, rate):
     robot = rosebot.RoseBot()
-    if direction == 'Clockwise':
-        robot.drive_system.spin_clockwise_until_sees_object(speed, area)
-    elif direction == 'Counterclockwise':
-        robot.drive_system.spin_counterclockwise_until_sees_object(speed, area)
-    time.sleep(3)
-    if string == 'LED':
-        m3_led_proximity_sensor(initial, rate_of_increase)
+    print('Spin unit see object')
+    if direction == 'CCW':
+        robot.drive_system.spin_counterclockwise_until_sees_object(float(speed), int(area))
+    elif direction == 'CW':
+        robot.drive_system.spin_clockwise_until_sees_object(float(speed), int(area))
+    else:
+        print('Entered Invalid Direction')
+        print('Default Direction is CounterClockWise')
+        robot.drive_system.spin_clockwise_until_sees_object(float(speed), int(area))
+    time.sleep(2)
+    blob = robot.sensor_system.camera.get_biggest_blob()
+    blob_center = blob.center.x
+    print(blob_center)
+    if blob_center > 160 and blob_center > 0:
+        robot.drive_system.go(30, -30)
+        while True:
+            print(blob_center)
+            blob = robot.sensor_system.camera.get_biggest_blob()
+            blob_center = blob.center.x
+            if 157 < blob_center and blob_center > 162:
+                robot.drive_system.stop()
+                break
+    elif blob_center < 160 or blob_center == 0:
+        robot.drive_system.go(-30, 30)
+        while True:
+            print(blob_center)
+            blob = robot.sensor_system.camera.get_biggest_blob()
+            blob_center = blob.center.x
+            if 157 < blob_center and blob_center > 162:
+                robot.drive_system.stop()
+                break
+    m3_led_proximity_sensor(int(initial), float(rate))
+
+
+def m3_beep_pick_up(speed, area, direction, initial, rate):
+    robot = rosebot.RoseBot()
+    print('Spin unit see object')
+    if direction == 'CCW':
+        robot.drive_system.spin_counterclockwise_until_sees_object(float(speed), int(area))
+    elif direction == 'CW':
+        robot.drive_system.spin_clockwise_until_sees_object(float(speed), int(area))
+    else:
+        print('Entered Invalid Direction')
+        print('Default Direction is CounterClockWise')
+        robot.drive_system.spin_clockwise_until_sees_object(float(speed), int(area))
+    time.sleep(2)
+    blob = robot.sensor_system.camera.get_biggest_blob()
+    blob_center = blob.center.x
+    print(blob_center)
+    if blob_center > 160 and blob_center > 0:
+        robot.drive_system.go(30, -30)
+        while True:
+            print(blob_center)
+            blob = robot.sensor_system.camera.get_biggest_blob()
+            blob_center = blob.center.x
+            if 157 < blob_center and blob_center > 162:
+                robot.drive_system.stop()
+                break
+    elif blob_center < 160 or blob_center == 0:
+        robot.drive_system.go(-30, 30)
+        while True:
+            print(blob_center)
+            blob = robot.sensor_system.camera.get_biggest_blob()
+            blob_center = blob.center.x
+            if 157 < blob_center and blob_center > 162:
+                robot.drive_system.stop()
+                break
+    m1_pick_up(int(initial), float(rate), float(speed))
+    # runs in delegate but they haven't pulled over code so I can run
+
+
+def m3_tone_pick_up(speed, area, direction, initial, rate):
+    robot = rosebot.RoseBot()
+    print('Spin unit see object')
+    if direction == 'CCW':
+        robot.drive_system.spin_counterclockwise_until_sees_object(float(speed), int(area))
+    elif direction == 'CW':
+        robot.drive_system.spin_clockwise_until_sees_object(float(speed), int(area))
+    else:
+        print('Entered Invalid Direction')
+        print('Default Direction is CounterClockWise')
+        robot.drive_system.spin_clockwise_until_sees_object(float(speed), int(area))
+    time.sleep(2)
+    blob = robot.sensor_system.camera.get_biggest_blob()
+    blob_center = blob.center.x
+    print(blob_center)
+    if blob_center > 160 and blob_center > 0:
+        robot.drive_system.go(30, -30)
+        while True:
+            print(blob_center)
+            blob = robot.sensor_system.camera.get_biggest_blob()
+            blob_center = blob.center.x
+            if 157 < blob_center and blob_center > 162:
+                robot.drive_system.stop()
+                break
+    elif blob_center < 160 or blob_center == 0:
+        robot.drive_system.go(-30, 30)
+        while True:
+            print(blob_center)
+            blob = robot.sensor_system.camera.get_biggest_blob()
+            blob_center = blob.center.x
+            if 157 < blob_center and blob_center > 162:
+                robot.drive_system.stop()
+                break
+    m2_tone_to_distance(int(initial), float(rate))
+    # runs in delegate but they haven't pulled over code so I can run
 
 
 # -----------------------------------------------------------------------------
