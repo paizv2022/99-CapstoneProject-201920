@@ -89,9 +89,9 @@ class ResponderToGUIMessages(object):
 
     def m1_camera_pick_up(self, initial, rate, speed, direction, area):
         if direction == 'CW':
-            self.robot.drive_system.spin_clockwise_until_sees_object(speed, int(area))
+            self.robot.drive_system.spin_clockwise_until_sees_object(int(speed), int(area))
         elif direction == 'CCW':
-            self.robot.drive_system.spin_counterclockwise_until_sees_object(speed, int(area))
+            self.robot.drive_system.spin_counterclockwise_until_sees_object(int(speed), int(area))
         self.m1_pick_up(initial, rate, speed)
 
     def m3_led_proximity_sensor(self, initial, rate_of_increase):
