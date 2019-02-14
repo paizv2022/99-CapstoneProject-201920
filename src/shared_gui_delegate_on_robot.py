@@ -123,7 +123,7 @@ class ResponderToGUIMessages(object):
                 self.robot.arm_and_claw.raise_arm()
                 break
             increment = float(initial)/float(rate_of_increase)
-            sub = 100/increment
+            sub = 70/increment
             pos = 100 - distance
             x = pos/sub
             secs = float(initial) - (float(rate_of_increase) * x)
@@ -184,3 +184,71 @@ class ResponderToGUIMessages(object):
                     self.robot.drive_system.stop()
                     break
         self.m3_led_proximity_sensor(int(initial), float(rate))
+
+    def m3_beep_pick_up(self, speed, area, direction, initial, rate):
+        print('Spin unit see object')
+        if direction == 'CCW':
+            self.robot.drive_system.spin_counterclockwise_until_sees_object(float(speed), int(area))
+        elif direction == 'CW':
+            self.robot.drive_system.spin_clockwise_until_sees_object(float(speed), int(area))
+        else:
+            print('Entered Invalid Direction')
+            print('Default Direction is CounterClockWise')
+            self.robot.drive_system.spin_clockwise_until_sees_object(float(speed), int(area))
+        time.sleep(2)
+        blob = self.robot.sensor_system.camera.get_biggest_blob()
+        blob_center = blob.center.x
+        print(blob_center)
+        if blob_center > 160 and blob_center > 0:
+            self.robot.drive_system.go(30, -30)
+            while True:
+                print(blob_center)
+                blob = self.robot.sensor_system.camera.get_biggest_blob()
+                blob_center = blob.center.x
+                if 157 < blob_center and blob_center > 162:
+                    self.robot.drive_system.stop()
+                    break
+        elif blob_center < 160 or blob_center == 0:
+            self.robot.drive_system.go(-30, 30)
+            while True:
+                print(blob_center)
+                blob = self.robot.sensor_system.camera.get_biggest_blob()
+                blob_center = blob.center.x
+                if 157 < blob_center and blob_center > 162:
+                    self.robot.drive_system.stop()
+                    break
+        self.m1_pick_up(int(initial), float(rate), float(speed))
+
+    def m3_tone_pick_up(self, speed, area, direction, initial, rate):
+        print('Spin unit see object')
+        if direction == 'CCW':
+            self.robot.drive_system.spin_counterclockwise_until_sees_object(float(speed), int(area))
+        elif direction == 'CW':
+            self.robot.drive_system.spin_clockwise_until_sees_object(float(speed), int(area))
+        else:
+            print('Entered Invalid Direction')
+            print('Default Direction is CounterClockWise')
+            self.robot.drive_system.spin_clockwise_until_sees_object(float(speed), int(area))
+        time.sleep(2)
+        blob = self.robot.sensor_system.camera.get_biggest_blob()
+        blob_center = blob.center.x
+        print(blob_center)
+        if blob_center > 160 and blob_center > 0:
+            self.robot.drive_system.go(30, -30)
+            while True:
+                print(blob_center)
+                blob = self.robot.sensor_system.camera.get_biggest_blob()
+                blob_center = blob.center.x
+                if 157 < blob_center and blob_center > 162:
+                    self.robot.drive_system.stop()
+                    break
+        elif blob_center < 160 or blob_center == 0:
+            self.robot.drive_system.go(-30, 30)
+            while True:
+                print(blob_center)
+                blob = self.robot.sensor_system.camera.get_biggest_blob()
+                blob_center = blob.center.x
+                if 157 < blob_center and blob_center > 162:
+                    self.robot.drive_system.stop()
+                    break
+        self.m2_tone_to_distance(int(initial), float(rate))
