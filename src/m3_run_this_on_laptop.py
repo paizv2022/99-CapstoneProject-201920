@@ -90,6 +90,7 @@ def get_pick_up_with_proximity_sensor_frame(window, mqtt_sender):
     frame.grid()
 
     # Construct the widgets on the frame:
+    frame_label0 = ttk.Label(frame, text='LED Pick up')
     frame_label1 = ttk.Label(frame, text="Initial: ")
     frame_label2 = ttk.Label(frame, text="Rate of Increase: ")
     initial_entry = ttk.Entry(frame, width=8)
@@ -97,11 +98,12 @@ def get_pick_up_with_proximity_sensor_frame(window, mqtt_sender):
     go_button = ttk.Button(frame, text='Go')
 
     # Grid the widgets:
-    frame_label1.grid(row=0, column=0)
-    frame_label2.grid(row=0, column=3)
-    initial_entry.grid(row=0, column=1)
-    rate_of_increase_entry.grid(row=0, column=4)
-    go_button.grid(row=0, column=5)
+    frame_label0.grid(row=0, column=2)
+    frame_label1.grid(row=1, column=0)
+    frame_label2.grid(row=1, column=2)
+    initial_entry.grid(row=1, column=1)
+    rate_of_increase_entry.grid(row=1, column=3)
+    go_button.grid(row=1, column=5)
 
     # Set the Button callbacks:
     go_button["command"] = lambda: handle_pick_up_with_proximity_sensor(initial_entry, rate_of_increase_entry,
@@ -150,6 +152,8 @@ def get_choose_pick_up_frame(window, mqtt_sender):
     frame_label4 = ttk.Label(frame, text='Direction: ')
     frame_label5 = ttk.Label(frame, text='Initial : ')
     frame_label6 = ttk.Label(frame, text="Rate of Increase: ")
+    frame_label7 = ttk.Label(frame, text='0 - 100 Respectively')
+    frame_label8 = ttk.Label(frame, text='CW/CCW')
     speed_scale = ttk.Scale(frame, from_=0, to=100)
     area_entry = ttk.Entry(frame, width=8)
     direction_entry = ttk.Entry(frame, width=8)
@@ -167,6 +171,8 @@ def get_choose_pick_up_frame(window, mqtt_sender):
     frame_label4.grid(row=3, column=0)
     frame_label5.grid(row=4, column=0)
     frame_label6.grid(row=5, column=0)
+    frame_label7.grid(row=1, column=2)
+    frame_label8.grid(row=3, column=2)
     speed_scale.grid(row=1, column=1)
     area_entry.grid(row=2, column=1)
     direction_entry.grid(row=3, column=1)
