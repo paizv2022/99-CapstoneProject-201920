@@ -8,6 +8,7 @@
 """
 import time
 import math
+import m3_run_this_on_robot as m3
 
 
 class ResponderToGUIMessages(object):
@@ -251,3 +252,9 @@ class ResponderToGUIMessages(object):
                     self.robot.drive_system.stop()
                     break
         self.m2_tone_to_distance(int(initial), float(rate))
+
+    def m3_tag(self, speed):
+        m3.m3_tag(float(speed))
+
+    def m3_rps(self, chosen_play):
+        m3.m3_rps(chosen_play)
