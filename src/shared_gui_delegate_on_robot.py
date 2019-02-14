@@ -126,7 +126,7 @@ class ResponderToGUIMessages(object):
             sub = 100/increment
             pos = 100 - distance
             x = pos/sub
-            secs = initial - (float(rate_of_increase) * x)
+            secs = float(initial) - (float(rate_of_increase) * x)
             if secs < 0:
                 secs = 0
 
@@ -150,3 +150,37 @@ class ResponderToGUIMessages(object):
             time.sleep(.2)
             b = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
             average = (a + b) / 2
+
+    def m3_led_pick_up(self, speed, area, direction, initial, rate):
+        print('Spin unit see object')
+        if direction == 'CCW':
+            self.robot.drive_system.spin_counterclockwise_until_sees_object(float(speed), int(area))
+        elif direction == 'CW':
+            self.robot.drive_system.spin_clockwise_until_sees_object(float(speed), int(area))
+        else:
+            print('Entered Invalid Direction')
+            print('Default Direction is CounterClockWise')
+            self.robot.drive_system.spin_clockwise_until_sees_object(float(speed), int(area))
+        time.sleep(2)
+        blob = self.robot.sensor_system.camera.get_biggest_blob()
+        blob_center = blob.center.x
+        print(blob_center)
+        if blob_center > 160 and blob_center > 0:
+            self.robot.drive_system.go(30, -30)
+            while True:
+                print(blob_center)
+                blob = self.robot.sensor_system.camera.get_biggest_blob()
+                blob_center = blob.center.x
+                if 157 < blob_center and blob_center > 162:
+                    self.robot.drive_system.stop()
+                    break
+        elif blob_center < 160 or blob_center == 0:
+            self.robot.drive_system.go(-30, 30)
+            while True:
+                print(blob_center)
+                blob = self.robot.sensor_system.camera.get_biggest_blob()
+                blob_center = blob.center.x
+                if 157 < blob_center and blob_center > 162:
+                    self.robot.drive_system.stop()
+                    break
+        self.m3_led_proximity_sensor(int(initial), float(rate))

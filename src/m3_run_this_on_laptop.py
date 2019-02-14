@@ -150,7 +150,7 @@ def get_choose_pick_up_frame(window, mqtt_sender):
     frame_label4 = ttk.Label(frame, text='Direction: ')
     frame_label5 = ttk.Label(frame, text='Initial : ')
     frame_label6 = ttk.Label(frame, text="Rate of Increase: ")
-    speed_entry = ttk.Entry(frame, width=8)
+    speed_scale = ttk.Scale(frame, from_=0, to=100)
     area_entry = ttk.Entry(frame, width=8)
     direction_entry = ttk.Entry(frame, width=8)
     initial_entry = ttk.Entry(frame, width=8)
@@ -167,7 +167,7 @@ def get_choose_pick_up_frame(window, mqtt_sender):
     frame_label4.grid(row=3, column=0)
     frame_label5.grid(row=4, column=0)
     frame_label6.grid(row=5, column=0)
-    speed_entry.grid(row=1, column=1)
+    speed_scale.grid(row=1, column=1)
     area_entry.grid(row=2, column=1)
     direction_entry.grid(row=3, column=1)
     initial_entry.grid(row=4, column=1)
@@ -177,9 +177,12 @@ def get_choose_pick_up_frame(window, mqtt_sender):
     tone_button.grid(row=6, column=2)
 
     # Set the Button callbacks:
-    led_button["command"] = lambda: handle_led(speed_entry, area_entry, direction_entry, initial_entry, rate_entry, mqtt_sender)
-    beeping_button['command'] = lambda: handle_beep(speed_entry, area_entry, direction_entry, initial_entry, rate_entry, mqtt_sender)
-    tone_button['command'] = lambda: handle_tone(speed_entry, area_entry, direction_entry, initial_entry, rate_entry, mqtt_sender)
+    led_button["command"] = lambda: handle_led(speed_scale, area_entry, direction_entry, initial_entry, rate_entry,
+                                               mqtt_sender)
+    beeping_button['command'] = lambda: handle_beep(speed_scale, area_entry, direction_entry, initial_entry, rate_entry,
+                                                    mqtt_sender)
+    tone_button['command'] = lambda: handle_tone(speed_scale, area_entry, direction_entry, initial_entry, rate_entry,
+                                                 mqtt_sender)
 
     return frame
 
