@@ -104,8 +104,8 @@ def grid_sprint3_frames(tag_frame, rps_frame, teleop_frame, arm_frame, control_f
     teleop_frame.grid(row=0, column=0)
     arm_frame.grid(row=1, column=0)
     control_frame.grid(row=2, column=0)
-    tag_frame.grid(row=0, column=1)
-    rps_frame.grid(row=1, column=1)
+    tag_frame.grid(row=3, column=0)
+    rps_frame.grid(row=4, column=0)
 
 
 def get_pick_up_with_proximity_sensor_frame(window, mqtt_sender):
@@ -245,18 +245,18 @@ def get_rps_frame(window, mqtt_sender):
     frame.grid()
 
     frame_label1 = ttk.Label(frame, text='Rock Paper Scissors')
-    rock_button = ttk.Button(frame, text='Rock')
-    paper_button = ttk.Button(frame, text='Paper')
-    scissors_button = ttk.Button(frame, text='Scissors')
+    lb = tkinter.Listbox(frame, width=10, height=3)
+    go_button = ttk.Button(frame, text='Go')
 
-    frame_label1.grid(row=0, column=1)
-    rock_button.grid(row=1, column=0)
-    paper_button.grid(row=1, column=1)
-    scissors_button.grid(row=1, column=2)
+    lb.insert(0, 'Rock')
+    lb.insert(1, 'Paper')
+    lb.insert(2, 'Scissors')
 
-    # rock_button['command'] = lambda:
-    # paper_button['command'] = lambda:
-    # #scissors_button['command'] = lambda:
+    frame_label1.grid(row=0, column=1, padx=10, pady=5)
+    go_button.grid(row=2, column=1, padx=10, pady=5)
+    lb.grid(row=1, column=1, padx=10, pady=5)
+
+    go_button['command'] = lambda: handle_rps(lb, mqtt_sender)
 
     return frame
 
@@ -305,7 +305,15 @@ def handle_tone(speed_entry, area_entry, direction_entry, initial_entry, rate_en
 
 def handle_tag(speed_scale_value, mqtt_sender):
     print('Playing Tag!')
-    mqtt_sender.send_message('m3_tone_pick_up', [speed_scale_value.get()])
+    mqtt_sender.send_message('m3_tag', [speed_scale_value.get()])
+
+
+def handle_rps(lb, mqtt_sender):
+    a = lb.curselection()
+    for i in a:
+        x = lb.get(i)
+    print('You chose', x + '!')
+    mqtt_sender.send_message('m3_rps', [x])
 
 
 # -----------------------------------------------------------------------------
