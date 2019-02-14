@@ -40,8 +40,11 @@ def main():
     # -------------------------------------------------------------------------
     # Sub-frames for the shared GUI that the team developed:
     # -------------------------------------------------------------------------
-    teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, m3_proximity_sensor_frame,\
-        camera_frame, choose_pick_up_frame = get_shared_frames(main_frame, mqtt_sender)
+
+    # teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, m3_proximity_sensor_frame,\
+    #   camera_frame, choose_pick_up_frame = get_shared_frames(main_frame, mqtt_sender)
+
+    tag_frame, rps_frame, teleop_frame, arm_frame, control_frame = get_shared_frames_sprint3(main_frame, mqtt_sender)
 
     # -------------------------------------------------------------------------
     # Frames that are particular to my individual contributions to the project.
@@ -51,8 +54,11 @@ def main():
     # -------------------------------------------------------------------------
     # Grid the frames.
     # -------------------------------------------------------------------------
-    grid_frames(teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, m3_proximity_sensor_frame,
-                camera_frame, choose_pick_up_frame)
+
+    #grid_frames(teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, m3_proximity_sensor_frame,
+    #            camera_frame, choose_pick_up_frame)
+
+    grid_sprint3_frames(tag_frame, rps_frame, teleop_frame, arm_frame, control_frame)
 
     # -------------------------------------------------------------------------
     # The event loop:
@@ -73,6 +79,15 @@ def get_shared_frames(main_frame, mqtt_sender):
         pick_up_with_proximity_sensor_frame, m3_camera_frame, choose_pick_up_frame
 
 
+def get_shared_frames_sprint3(main_frame, mqtt_sender):
+    teleop_frame = shared_gui.get_teleoperation_frame(main_frame, mqtt_sender)
+    arm_frame = shared_gui.get_arm_frame(main_frame, mqtt_sender)
+    control_frame = shared_gui.get_control_frame(main_frame, mqtt_sender)
+    tag_frame = get_tag_frame(main_frame, mqtt_sender)
+    rps_frame = get_rps_frame(main_frame, mqtt_sender)
+    return tag_frame, rps_frame, teleop_frame, arm_frame, control_frame
+
+
 def grid_frames(teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, pick_up_with_proximity_sensor_frame,
                 camera_frame, choose_pick_up_frame):
     teleop_frame.grid(row=0, column=0)
@@ -83,6 +98,14 @@ def grid_frames(teleop_frame, arm_frame, control_frame, driver_frame, sound_fram
     pick_up_with_proximity_sensor_frame.grid(row=2, column=1)
     camera_frame.grid(row=3, column=1)
     choose_pick_up_frame.grid(row=3, column=0)
+
+
+def grid_sprint3_frames(tag_frame, rps_frame, teleop_frame, arm_frame, control_frame):
+    teleop_frame.grid(row=0, column=0)
+    arm_frame.grid(row=1, column=0)
+    control_frame.grid(row=2, column=0)
+    tag_frame.grid(row=0, column=1)
+    rps_frame.grid(row=1, column=1)
 
 
 def get_pick_up_with_proximity_sensor_frame(window, mqtt_sender):
@@ -193,6 +216,51 @@ def get_choose_pick_up_frame(window, mqtt_sender):
     return frame
 
 
+def get_tag_frame(window, mqtt_sender):
+    frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
+    frame.grid()
+
+    frame_label1 = ttk.Label(frame, text='TAG')
+    frame_label2 = ttk.Label(frame, text='Speed: ')
+    frame_label3 = ttk.Label(frame, text='0 - 100 Respectively')
+    speed_scale = ttk.Scale(frame, from_=0, to=100)
+    go_button = ttk.Button(frame, text='Go')
+    stop_button = ttk.Button(frame, text='Stop')
+
+    frame_label1.grid(row=0, column=1)
+    frame_label2.grid(row=1, column=0)
+    frame_label3.grid(row=1, column=2)
+    speed_scale.grid(row=1, column=1, padx=10, pady=10)
+    go_button.grid(row=2, column=0)
+    stop_button.grid(row=2, column=2)
+
+    go_button['command'] = lambda: handle_tag(speed_scale, mqtt_sender)
+    stop_button['command'] = lambda: shared_gui.handle_quit(mqtt_sender)
+
+    return frame
+
+
+def get_rps_frame(window, mqtt_sender):
+    frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
+    frame.grid()
+
+    frame_label1 = ttk.Label(frame, text='Rock Paper Scissors')
+    rock_button = ttk.Button(frame, text='Rock')
+    paper_button = ttk.Button(frame, text='Paper')
+    scissors_button = ttk.Button(frame, text='Scissors')
+
+    frame_label1.grid(row=0, column=1)
+    rock_button.grid(row=1, column=0)
+    paper_button.grid(row=1, column=1)
+    scissors_button.grid(row=1, column=2)
+
+    # rock_button['command'] = lambda:
+    # paper_button['command'] = lambda:
+    # #scissors_button['command'] = lambda:
+
+    return frame
+
+
 def handle_pick_up_with_proximity_sensor(initial_entry, rate_of_increase_entry, mqtt_sender):
     print("Initial:", initial_entry.get(), "Rate of increase:", rate_of_increase_entry.get())
     mqtt_sender.send_message("m3_led_proximity_sensor", [initial_entry.get(), rate_of_increase_entry.get()])
@@ -233,6 +301,11 @@ def handle_tone(speed_entry, area_entry, direction_entry, initial_entry, rate_en
     print("Initial:", initial_entry.get(), "Rate of increase:", rate_entry.get())
     mqtt_sender.send_message('m3_tone_pick_up', [speed_entry.get(), area_entry.get(), direction_entry.get(),
                                                  initial_entry.get(), rate_entry.get()])
+
+
+def handle_tag(speed_scale_value, mqtt_sender):
+    print('Playing Tag!')
+    mqtt_sender.send_message('m3_tone_pick_up', [speed_scale_value.get()])
 
 
 # -----------------------------------------------------------------------------
