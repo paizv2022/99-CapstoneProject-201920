@@ -101,6 +101,7 @@ def main():
 
         start_tone_button = ttk.Button(frame, text="Start Playing Tone")
         stop_tone_button = ttk.Button(frame, text="Stop Playing Tone")
+        pick_up_button = ttk.Button(frame, text="Pick up Object")
 
         # displays widgets
         frame_label.grid(row=0, column=1)
@@ -110,20 +111,59 @@ def main():
         frequency_rate_entry.grid(row=2, column=2)
         start_tone_button.grid(row=2, column=1)
         stop_tone_button.grid(row=3, column=1)
+        pick_up_button.grid(row=4, column=1)
 
         #sets buttons to run functions
         start_tone_button["command"] = lambda: handle_start_tone(mqtt_sender, initial_frequency_entry, frequency_rate_entry)
         stop_tone_button["command"] = lambda: handle_stop_tone(mqtt_sender)
         return frame
 
+    def get_pick_up_frame(window, mqtt_sender):
+        frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
+        frame.grid()
 
+        frame_label = ttk.Label(frame, text='Find and pick up object')
+        speed_label = ttk.Label(frame, text='Speed')
+        spin_label = ttk.Label(frame, text='Spin direction (CC or CW)')
+        initial_label = ttk.Label(frame, text='Initial frequency:')
+        rate_label = ttk.Label(frame, text='Increase rate (Hz per Inch)')
+        pick_up_label = ttk.Label(frame, text="find and pick up object")
+        area_label = ttk.Label(frame, text="area (for camera to sense object)")
+
+
+        speed_entry = ttk.Entry(frame, width=8)
+        spin_entry = ttk.Entry(frame, width=8)
+        initial_entry = ttk.Entry(frame, width=8)
+        rate_entry = ttk.Entry(frame, width=8)
+        area_entry = ttk.Entry(frame, width=8)
+
+        pick_up_button = ttk.Button(frame, text='Find and Pick up')
+
+        frame_label.grid(row=0, column=0)
+        speed_label.grid(row=3, column=0)
+        speed_entry.grid(row=4, column=0)
+        spin_label.grid(row=1, column=0)
+        spin_entry.grid(row=2, column=0)
+        area_label.grid(row=5, column=0)
+        area_entry.grid(row=6, column=0)
+        initial_label.grid(row=7, column=0)
+        initial_entry.grid(row=8, column=0)
+        rate_label.grid(row=9, column=0)
+        rate_entry.grid(row=10, column=0)
+        pick_up_label.grid(row=11, column=0)
+        pick_up_button.grid(row=12, column=0)
+
+        pick_up_button["command"] = lambda: handle_pick_up(mqtt_sender, spin_entry, speed_entry, area_entry, initial_entry, rate_entry)
+
+        return frame
 
     infrared_frame = get_infrared_frame(main_frame, mqtt_sender)
     tone_frame = get_tone_frame(main_frame, mqtt_sender)
+    pick_up_Frame = get_pick_up_frame(main_frame, mqtt_sender)
     # -------------------------------------------------------------------------
     # Grid the frames.
     # -------------------------------------------------------------------------
-    grid_frames(teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, infrared_frame, tone_frame)
+    grid_frames(teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, infrared_frame, tone_frame, pick_up_Frame)
 
     # -------------------------------------------------------------------------
     # The event loop:
@@ -144,7 +184,7 @@ def get_shared_frames(main_frame, mqtt_sender):
     return teleop_frame, arm_frame, control_frame, driver_frame, sound_frame
 
 
-def grid_frames(teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, infrared_frame, tone_frame):
+def grid_frames(teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, infrared_frame, tone_frame, pick_up_frame):
     #row = up + down, column = left and right
     teleop_frame.grid(row=0, column=0)
     arm_frame.grid(row=1, column=0)
@@ -152,22 +192,23 @@ def grid_frames(teleop_frame, arm_frame, control_frame, driver_frame, sound_fram
     driver_frame.grid(row=0, column=1)
     sound_frame.grid(row=1, column=1)
     infrared_frame.grid(row=2, column=1)
-    tone_frame.grid(row=1, column=2)
+    tone_frame.grid(row=0, column=2)
+    pick_up_frame.grid(row=1, column=2)
 
 ###############################################################################
 # Handlers for Buttons in the Infrared frame
 ###############################################################################
 def handle_go_until_less_than(mqtt_sender, inches_entry, speed_entry):
     print("Driving forward until I am less than", inches_entry.get(), "inches from an object at a speed of", speed_entry.get())
-    mqtt_sender.send_message("go_forward_until_distance_is_less_than", [float(inches_entry.get()), float(speed_entry.get())])
+    mqtt_sender.send_message("m2_go_forward_until_distance_is_less_than", [float(inches_entry.get()), float(speed_entry.get())])
 
 def handle_go_until_greater_than(mqtt_sender, inches_entry, speed_entry):
     print("Driving backward until I am greater than", inches_entry.get(), "inches from an object at a speed of", speed_entry.get())
-    mqtt_sender.send_message("go_backward_until_distance_is_greater_than", [float(inches_entry.get()), float(speed_entry.get())])
+    mqtt_sender.send_message("m2_go_backward_until_distance_is_greater_than", [float(inches_entry.get()), float(speed_entry.get())])
 
 def handle_go_until_within(mqtt_sender, range_entry, inches_entry, speed_entry):
     print("Driving forwards and backwards until I am within", inches_entry.get(), "+ or - ", range_entry.get(), "inches from an object at a speed of", speed_entry.get())
-    mqtt_sender.send_message("go_until_distance_is_within", [float(range_entry.get()) ,float(inches_entry.get()), float(speed_entry.get())])
+    mqtt_sender.send_message("m2_go_until_distance_is_within", [float(range_entry.get()) ,float(inches_entry.get()), float(speed_entry.get())])
 
 ###############################################################################
 # Handlers for Buttons in the Tone frame
@@ -179,6 +220,13 @@ def handle_start_tone(mqtt_sender, initial_frequency_entry, frequency_rate_entry
 def handle_stop_tone(mqtt_sender):
     print("Stopping tone")
     mqtt_sender.send_message("m2_stop_tone")
+
+###############################################################################
+# Handler for Button in the pick_up frame
+###############################################################################
+def handle_pick_up(mqtt_sender, spin, speed, area, frequency, rate):
+    print("Finding and Picking up object")
+    mqtt_sender.send_message("m2_tone_and_camera_pick_up", [spin.get(), int(speed.get()), int(area.get()), int(frequency.get()), int(rate.get())])
 
 # -----------------------------------------------------------------------------
 # Calls  main  to start the ball rolling.

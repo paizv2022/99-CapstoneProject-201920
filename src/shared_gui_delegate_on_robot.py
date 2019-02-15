@@ -17,6 +17,7 @@ class ResponderToGUIMessages(object):
         """
         self.robot = robot
         self.stop_program = False
+        self.stop_tone = False
 
     def go(self, left_wheel_speed, right_wheel_speed):
         left = int(left_wheel_speed)
@@ -139,7 +140,17 @@ class ResponderToGUIMessages(object):
         area = int(area)
         self.robot.drive_system.spin_clockwise_until_sees_object(speed, area)
 
+    def m2_go_forward_until_distance_is_less_than(self, inches, speed):
+        self.robot.drive_system.go_forward_until_distance_is_less_than(inches, speed)
+
+    def m2_go_backward_until_distance_is_greater_than(self, inches, speed):
+        self.robot.drive_system.go_backward_until_distance_is_greater_than(inches,speed)
+
+    def m2_go_until_distance_is_within(selfs, delta, inches, speed):
+        selfs.robot.drive_system.go_until_distance_is_within(delta, inches, speed)
+
     def m2_tone_to_distance(self, initial_frequency, frequency_rate):
+        self.stop_tone = False
         average = 0
         start = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
         while True:
@@ -149,6 +160,13 @@ class ResponderToGUIMessages(object):
             time.sleep(.2)
             b = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
             average = (a + b) / 2
+            if average <= 2:
+                break
+        print("Tone has stopped")
+        return
+
+    def m2_stop_tone(self):
+        self.stop_tone = True
 
     def m3_led_pick_up(self, speed, area, direction, initial, rate):
         print('Spin unit see object')
@@ -251,3 +269,19 @@ class ResponderToGUIMessages(object):
                     self.robot.drive_system.stop()
                     break
         self.m2_tone_to_distance(int(initial), float(rate))
+
+    def m2_tone_pick_up(self, initial_frequency, frequency_rate, speed):
+        self.robot.drive_system.go(speed, speed)
+        self.m2_tone_to_distance(initial_frequency, frequency_rate)
+        while True:
+            if self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches() <= 2:
+                break
+        self.robot.drive_system.stop()
+        self.robot.arm_and_claw.raise_arm()
+
+    def m2_tone_and_camera_pick_up(self, spin, speed, area, initial_frequency, frequency_rate,):
+        if spin == 'CW':
+            self.robot.drive_system.spin_clockwise_until_sees_object(speed, area)
+        elif spin == 'CC':
+            self.robot.drive_system.spin_counterclockwise_until_sees_object(speed, area)
+        self.m2_tone_pick_up(initial_frequency, frequency_rate, speed)
