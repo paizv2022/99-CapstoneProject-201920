@@ -8,6 +8,7 @@
 """
 import time
 import math
+import m3_run_this_on_robot as m3
 
 
 class ResponderToGUIMessages(object):
@@ -90,9 +91,9 @@ class ResponderToGUIMessages(object):
 
     def m1_camera_pick_up(self, initial, rate, speed, direction, area):
         if direction == 'CW':
-            self.robot.drive_system.spin_clockwise_until_sees_object(speed, int(area))
+            self.robot.drive_system.spin_clockwise_until_sees_object(int(speed), int(area))
         elif direction == 'CCW':
-            self.robot.drive_system.spin_counterclockwise_until_sees_object(speed, int(area))
+            self.robot.drive_system.spin_counterclockwise_until_sees_object(int(speed), int(area))
         self.m1_pick_up(initial, rate, speed)
 
     def m3_led_proximity_sensor(self, initial, rate_of_increase):
@@ -285,3 +286,9 @@ class ResponderToGUIMessages(object):
         elif spin == 'CC':
             self.robot.drive_system.spin_counterclockwise_until_sees_object(speed, area)
         self.m2_tone_pick_up(initial_frequency, frequency_rate, speed)
+
+    def m3_tag(self, speed):
+        m3.m3_tag(speed)
+
+    def m3_rps(self, chosen_play):
+        m3.m3_rps(chosen_play)
