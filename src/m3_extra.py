@@ -14,6 +14,7 @@ def m3_tag(speed):
         if distance < 2:
             robot.drive_system.stop()
             robot.sound_system.speech_maker.speak('You are it')
+            time.sleep(2)
             robot.drive_system.go(-50, 50)
             time.sleep(3)
             robot.drive_system.go(speed, speed)
@@ -69,3 +70,16 @@ def m3_rps(chosen_play):
             robot.sound_system.speech_maker.speak('You lose')
     time.sleep(2)
     robot.arm_and_claw.move_arm_to_position(0)
+
+
+def i_spy(area):
+    print('Running I spy')
+    robot = rosebot.RoseBot()
+    while True:
+        blob = robot.sensor_system.camera.get_biggest_blob()
+        actual_area = blob.get_area()
+        print(actual_area)
+        time.sleep(.5)
+        if actual_area > area:
+            robot.sound_system.speech_maker.speak('I spy with my little eye, the color blue')
+            break

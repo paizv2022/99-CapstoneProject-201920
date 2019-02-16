@@ -44,7 +44,7 @@ def main():
     # teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, m3_proximity_sensor_frame,\
     #   camera_frame, choose_pick_up_frame = get_shared_frames(main_frame, mqtt_sender)
 
-    tag_frame, rps_frame, teleop_frame, arm_frame, control_frame = get_shared_frames_sprint3(main_frame, mqtt_sender)
+    i_spy_frame, tag_frame, rps_frame, teleop_frame, arm_frame, control_frame = get_shared_frames_sprint3(main_frame, mqtt_sender)
 
     # -------------------------------------------------------------------------
     # Frames that are particular to my individual contributions to the project.
@@ -58,7 +58,7 @@ def main():
     #grid_frames(teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, m3_proximity_sensor_frame,
     #            camera_frame, choose_pick_up_frame)
 
-    grid_sprint3_frames(tag_frame, rps_frame, teleop_frame, arm_frame, control_frame)
+    grid_sprint3_frames(i_spy_frame, tag_frame, rps_frame, teleop_frame, arm_frame, control_frame)
 
     # -------------------------------------------------------------------------
     # The event loop:
@@ -85,7 +85,8 @@ def get_shared_frames_sprint3(main_frame, mqtt_sender):
     control_frame = shared_gui.get_control_frame(main_frame, mqtt_sender)
     tag_frame = get_tag_frame(main_frame, mqtt_sender)
     rps_frame = get_rps_frame(main_frame, mqtt_sender)
-    return tag_frame, rps_frame, teleop_frame, arm_frame, control_frame
+    i_spy_frame = get_i_spy_frame(main_frame, mqtt_sender)
+    return i_spy_frame, tag_frame, rps_frame, teleop_frame, arm_frame, control_frame
 
 
 def grid_frames(teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, pick_up_with_proximity_sensor_frame,
@@ -100,12 +101,13 @@ def grid_frames(teleop_frame, arm_frame, control_frame, driver_frame, sound_fram
     choose_pick_up_frame.grid(row=3, column=0)
 
 
-def grid_sprint3_frames(tag_frame, rps_frame, teleop_frame, arm_frame, control_frame):
+def grid_sprint3_frames(i_spy_frame, tag_frame, rps_frame, teleop_frame, arm_frame, control_frame):
     teleop_frame.grid(row=0, column=0)
     arm_frame.grid(row=1, column=0)
     control_frame.grid(row=2, column=0)
     tag_frame.grid(row=3, column=0)
     rps_frame.grid(row=4, column=0)
+    i_spy_frame.grid(row=5, column=0)
 
 
 def get_pick_up_with_proximity_sensor_frame(window, mqtt_sender):
@@ -261,6 +263,25 @@ def get_rps_frame(window, mqtt_sender):
     return frame
 
 
+def get_i_spy_frame(window, mqtt_sender):
+    frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
+    frame.grid()
+
+    frame_label1 = ttk.Label(frame, text='I Spy')
+    frame_label2 = ttk.Label(frame, text='Area: ')
+    area_entry = tkinter.Entry(frame, width=8)
+    go_button = ttk.Button(frame, text='Go')
+
+    frame_label1.grid(row=0, column=1, padx=10, pady=5)
+    frame_label2.grid(row=1, column=0, padx=10, pady=5)
+    go_button.grid(row=1, column=2, padx=10, pady=5)
+    area_entry.grid(row=1, column=1, padx=10, pady=5)
+
+    go_button['command'] = lambda: handle_i_spy(area_entry, mqtt_sender)
+
+    return frame
+
+
 def handle_pick_up_with_proximity_sensor(initial_entry, rate_of_increase_entry, mqtt_sender):
     print("Initial:", initial_entry.get(), "Rate of increase:", rate_of_increase_entry.get())
     mqtt_sender.send_message("m3_led_proximity_sensor", [initial_entry.get(), rate_of_increase_entry.get()])
@@ -314,6 +335,11 @@ def handle_rps(lb, mqtt_sender):
         x = lb.get(i)
     print('You chose', x + '!')
     mqtt_sender.send_message('m3_rps', [x])
+
+
+def handle_i_spy(area_entry, mqtt_sender):
+    print("Playing I Spy!")
+    mqtt_sender.send_message('m3_i_spy', [area_entry.get()])
 
 
 # -----------------------------------------------------------------------------

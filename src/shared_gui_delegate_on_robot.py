@@ -8,7 +8,7 @@
 """
 import time
 import math
-import m3_run_this_on_robot as m3
+import m3_extra as m3
 
 
 class ResponderToGUIMessages(object):
@@ -288,7 +288,10 @@ class ResponderToGUIMessages(object):
         self.m2_tone_pick_up(initial_frequency, frequency_rate, speed)
 
     def m3_tag(self, speed):
-        m3.m3_tag(speed)
+        m3.m3_tag(float(speed))
 
     def m3_rps(self, chosen_play):
         m3.m3_rps(chosen_play)
+
+    def m3_i_spy(self, area):
+        m3.i_spy(int(area))

@@ -50,6 +50,7 @@ def real_thing():
     while True:
         time.sleep(0.01)
         if delegate.stop_program:
+            robot.drive_system.stop()
             break
 
 
