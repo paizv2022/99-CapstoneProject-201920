@@ -40,7 +40,8 @@ def main():
     # -------------------------------------------------------------------------
     # Sub-frames for the shared GUI that the team developed:
     # -------------------------------------------------------------------------
-    teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, colors_frame, collect_frames = get_shared_frames(main_frame, mqtt_sender)
+    teleop_frame, arm_frame, control_frame, driver_frame, sound_frame, colors_frame, collect_frames = get_shared_frames(
+        main_frame, mqtt_sender)
 
     # -------------------------------------------------------------------------
     # Grid the frames.
@@ -148,7 +149,8 @@ def collect_frame(window, mqtt_sender):
     camera_pick_up_button.grid(row=5, column=2)
 
     pick_up_button["command"] = lambda: handle_pick_up(mqtt_sender, initial_entry, rate_entry, speed_entry)
-    camera_pick_up_button["command"] = lambda: handle_camera_pick_up(mqtt_sender, initial_entry, rate_entry, speed_entry, direction_entry, area_entry)
+    camera_pick_up_button["command"] = lambda: handle_camera_pick_up(mqtt_sender, initial_entry, rate_entry,
+                                                                     speed_entry, direction_entry, area_entry)
 
     return frame
 
@@ -174,7 +176,9 @@ def handle_pick_up(mqtt_sender, initial_entry, rate_entry, speed_entry):
 
 
 def handle_camera_pick_up(mqtt_sender, initial_entry, rate_entry, speed_entry, direction_entry, area_entry):
-    mqtt_sender.send_message("m1_camera_pick_up", [initial_entry.get(), rate_entry.get(), speed_entry.get(), direction_entry.get(), area_entry.get()])
+    mqtt_sender.send_message("m1_camera_pick_up",
+                             [initial_entry.get(), rate_entry.get(), speed_entry.get(), direction_entry.get(),
+                              area_entry.get()])
 
 
 # -----------------------------------------------------------------------------

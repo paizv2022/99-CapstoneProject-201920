@@ -9,6 +9,7 @@
 import time
 import math
 import m3_extra as m3
+import m1_sprint3 as m1
 
 
 class ResponderToGUIMessages(object):
