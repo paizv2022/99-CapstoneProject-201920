@@ -141,7 +141,7 @@ def handle_word_entry(mqtt_sender, word, word_entry):
 
 def handle_start_game(mqtt_sender):
     print("starting game")
-    mqtt_sender.send_message("m2_wait_for_finish")
+    mqtt_sender.send_message("m2_start_game")
 
 #pick word for type racer game
 def pick_word():

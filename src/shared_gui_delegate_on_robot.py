@@ -20,6 +20,7 @@ class ResponderToGUIMessages(object):
         self.robot = robot
         self.stop_program = False
         self.stop_tone = False
+        self.robot.speed = 0
 
     def go(self, left_wheel_speed, right_wheel_speed):
         left = int(left_wheel_speed)
@@ -308,10 +309,14 @@ class ResponderToGUIMessages(object):
         self.robot.m2_stop = True
         self.robot.speed = 0
 
+    def m2_start_game(self):
+        self.robot.m2_start_game = True
+
     def m2_wait_for_finish(self):
         print("start")
         initial_time = time.time()
         while True:
+            self.robot.drive_system.go(self.robot.speed, self.robot.speed)
             distance = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
             color = self.robot.sensor_system.color_sensor.get_color_as_name()
             if distance <= 5:
