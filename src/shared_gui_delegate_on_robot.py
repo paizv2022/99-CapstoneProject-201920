@@ -296,3 +296,30 @@ class ResponderToGUIMessages(object):
 
     def m3_i_spy(self, area):
         m3.i_spy(int(area))
+
+    def m2_speed_up(self):
+        self.robot.m2_stop = False
+        if self.robot.speed < 100:
+            self.robot.speed = self.robot.speed + 10
+        else:
+            print("Max speed reached")
+
+    def m2_stop(self):
+        self.robot.m2_stop = True
+        self.robot.speed = 0
+
+    def m2_wait_for_finish(self):
+        print("start")
+        initial_time = time.time()
+        while True:
+            distance = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
+            color = self.robot.sensor_system.color_sensor.get_color_as_name()
+            if distance <= 5:
+                print("hit wall")
+                break
+            if color == 'White':
+                print("reached color")
+                break
+        self.robot.drive_system.stop()
+        time_taken = time.time() - initial_time
+        print("Finish!!! your time was:", time_taken)

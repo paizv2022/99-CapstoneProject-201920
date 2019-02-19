@@ -22,11 +22,17 @@ def main():
 
 def robot_run():
     robot = rosebot.RoseBot()
+    robot.speed = 0
+    robot.m2_stop = False
     delegate = shared_gui_delegate_on_robot.ResponderToGUIMessages(robot)
     mqtt_receiver = com.MqttClient(delegate)
     mqtt_receiver.connect_to_pc()
 
     while True:
+        if robot.m2_stop == False:
+            robot.drive_system.go(robot.speed, robot.speed)
+        else:
+            robot.drive_system.stop()
         if delegate.stop_program:
             break
         time.sleep(0.01)
