@@ -1,5 +1,3 @@
-# Put whatever you want in this module and do whatever you want with it.
-# It exists here as a place where you can "try out" things without harm.
 
 import mqtt_remote_method_calls as com
 import tkinter
@@ -72,7 +70,6 @@ def main():
         enter_button = ttk.Button(frame, text="Enter Word")
 
         start_button = ttk.Button(frame, text="Start Game")
-        stop_button = ttk.Button(frame, text="Stop Game")
         ttk.Style().configure("TButton", relief="flat", background="green", foreground="green", inground="red")
 
         #displays widgets
@@ -83,7 +80,6 @@ def main():
 
         enter_button.grid(row=3, column=1)
         start_button.grid(row=2, column=0)
-        #stop_button.grid(row=2, column=3)
 
         #sets buttons to speed up or stop robot depending on if the input is correct.
         start_button["command"] = lambda: handle_start_game(mqtt_sender)
@@ -150,6 +146,7 @@ def pick_word():
         string = string + str(word[k])
     print(string)
     return string
+
 
 # -----------------------------------------------------------------------------
 # Calls  main  to start the ball rolling.
