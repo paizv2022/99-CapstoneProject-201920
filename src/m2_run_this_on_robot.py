@@ -18,35 +18,20 @@ def main():
       2. Communicates via MQTT with the GUI code that runs on the LAPTOP.
     """
     robot_run()
-    #infrared_test()
 
 def robot_run():
     robot = rosebot.RoseBot()
     robot.speed = 0
     robot.m2_stop = False
+    delegate = shared_gui_delegate_on_robot.ResponderToGUIMessages(robot)
     robot.m2_start_game = False
-    delegate = shared_gui_delegate_on_robot.ResponderToGUIMessages(robot)
     mqtt_receiver = com.MqttClient(delegate)
     mqtt_receiver.connect_to_pc()
 
-    delegate.m2_wait_for_finish()
-
-''' while True:
-        if robot.m2_stop == False:
-            robot.drive_system.go(robot.speed, robot.speed)
-        else:
-            robot.drive_system.stop()
-        if delegate.stop_program:
-            break
-        time.sleep(0.01)'''
-
-def infrared_test():
-    robot = rosebot.RoseBot()
-    delegate = shared_gui_delegate_on_robot.ResponderToGUIMessages(robot)
-    mqtt_receiver = com.MqttClient(delegate)
-    mqtt_receiver.connect_to_pc()
-
-    robot.drive_system.go_forward_until_distance_is_less_than(5, 50)
+    while True:
+        if robot.m2_start_game == True:
+            delegate.m2_wait_for_finish()
+        time.sleep(0.01)
 
 # -----------------------------------------------------------------------------
 # Calls  main  to start the ball rolling.

@@ -21,6 +21,7 @@ class ResponderToGUIMessages(object):
         self.stop_program = False
         self.stop_tone = False
         self.robot.speed = 0
+        self.robot.m2_start_game = False
 
     def go(self, left_wheel_speed, right_wheel_speed):
         left = int(left_wheel_speed)
@@ -317,9 +318,11 @@ class ResponderToGUIMessages(object):
         initial_time = time.time()
         while True:
             self.robot.drive_system.go(self.robot.speed, self.robot.speed)
-            distance = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
+            distance_1 = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
+            time.sleep(.1)
+            distance_2 = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
             color = self.robot.sensor_system.color_sensor.get_color_as_name()
-            if distance <= 5:
+            if (distance_1 + distance_2) / 2 <= 10:
                 print("hit wall")
                 break
             if color == 'White':
@@ -327,4 +330,5 @@ class ResponderToGUIMessages(object):
                 break
         self.robot.drive_system.stop()
         time_taken = time.time() - initial_time
-        print("Finish!!! your time was:", time_taken)
+        print("Finish!!! your time was:", time_taken, "seconds")
+        self.robot.m2_start_game = False
