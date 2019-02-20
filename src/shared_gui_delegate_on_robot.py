@@ -13,14 +13,14 @@ import m1_sprint3 as m1
 
 
 class ResponderToGUIMessages(object):
-    def __init__(self, robot):
+    def __init__(self, robot, mqtt_sender=None):
         """
             :type robot: rosebot.RoseBot
         """
         self.robot = robot
         self.stop_program = False
         self.stop_tone = False
-        self.robot.speed = 0
+        self.mqtt_sender = mqtt_sender
 
     def go(self, left_wheel_speed, right_wheel_speed):
         left = int(left_wheel_speed)
@@ -63,6 +63,18 @@ class ResponderToGUIMessages(object):
 
     def quit(self):
         self.stop_program = True
+
+    def m1_forward(self, speed_entry):
+        m1.forward(self.robot, speed_entry)
+
+    def m1_stop(self):
+        m1.stop_robot(self.robot, self.mqtt_sender)
+
+    def m1_left(self, angle_entry):
+        m1.left(self.robot, angle_entry, self.mqtt_sender)
+
+    def m1_right(self, angle_entry):
+        m1.right(self.robot, angle_entry, self.mqtt_sender)
 
     def m1_greater_intensity(self, intensity_entry):
         self.robot.drive_system.go_straight_until_intensity_is_greater_than(int(intensity_entry), 100)
@@ -297,34 +309,3 @@ class ResponderToGUIMessages(object):
 
     def m3_i_spy(self, area):
         m3.i_spy(int(area))
-
-    def m2_speed_up(self):
-        self.robot.m2_stop = False
-        if self.robot.speed < 100:
-            self.robot.speed = self.robot.speed + 10
-        else:
-            print("Max speed reached")
-
-    def m2_stop(self):
-        self.robot.m2_stop = True
-        self.robot.speed = 0
-
-    def m2_start_game(self):
-        self.robot.m2_start_game = True
-
-    def m2_wait_for_finish(self):
-        print("start")
-        initial_time = time.time()
-        while True:
-            self.robot.drive_system.go(self.robot.speed, self.robot.speed)
-            distance = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
-            color = self.robot.sensor_system.color_sensor.get_color_as_name()
-            if distance <= 5:
-                print("hit wall")
-                break
-            if color == 'White':
-                print("reached color")
-                break
-        self.robot.drive_system.stop()
-        time_taken = time.time() - initial_time
-        print("Finish!!! your time was:", time_taken)
