@@ -76,10 +76,19 @@ def i_spy(area):
     print('Running I spy')
     robot = rosebot.RoseBot()
     while True:
+        robot.sensor_system.camera.set_signature('SIG1')
         blob = robot.sensor_system.camera.get_biggest_blob()
         actual_area = blob.get_area()
         print(actual_area)
         time.sleep(.5)
         if actual_area > area:
             robot.sound_system.speech_maker.speak('I spy with my little eye, the color blue')
+            break
+        robot.sensor_system.camera.set_signature('SIG2')
+        blob2 = robot.sensor_system.camera.get_biggest_blob()
+        actual_area2 = blob2.get_area()
+        print(actual_area2)
+        time.sleep(.5)
+        if actual_area2 > area:
+            robot.sound_system.speech_maker.speak('I spy with my little eye, the color yellow')
             break
