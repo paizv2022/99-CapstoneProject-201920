@@ -68,7 +68,8 @@ class ResponderToGUIMessages(object):
         m1.forward(self.robot, speed_entry)
 
     def m1_stop(self):
-        m1.stop_robot(self.robot, self.mqtt_sender)
+        color = self.robot.sensor_system.color_sensor.get_color_as_name()
+        m1.stop_robot(self.robot, self.mqtt_sender, color)
 
     def m1_left(self, angle_entry):
         m1.left(self.robot, angle_entry, self.mqtt_sender)
