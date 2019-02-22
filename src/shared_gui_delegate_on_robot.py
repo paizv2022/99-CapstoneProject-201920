@@ -315,6 +315,7 @@ class ResponderToGUIMessages(object):
 
     def m2_wait_for_finish(self):
         print("start")
+        self.robot.speed = 0
         initial_time = time.time()
         while True:
             self.robot.drive_system.go(self.robot.speed, self.robot.speed)
