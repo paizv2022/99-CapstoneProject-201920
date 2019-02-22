@@ -20,15 +20,11 @@ def main():
     robot_run()
 
 
-def test():
-    robot = rosebot.RoseBot()
-    robot.drive_system.go_straight_until_intensity_is_less_than(50)
-
-
 def robot_run():
     robot = rosebot.RoseBot()
     delegate = shared_gui_delegate_on_robot.ResponderToGUIMessages(robot)
     mqtt_receiver = com.MqttClient(delegate)
+    delegate.mqtt_sender = mqtt_receiver
     mqtt_receiver.connect_to_pc()
 
     while True:
